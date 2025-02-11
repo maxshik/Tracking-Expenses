@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="expenditure_categories">
+        <item>Алкоголь</item>
+        <item>Библиотека</item>
+        <item>Входные билеты</item>
+        <item>Гаджеты</item>
+        <item>Досуг с семьей</item>
+        <item>Книги</item>
+        <item>Косметика</item>
+        <item>Кулинария</item>
+        <item>Курсы и обучение</item>
+        <item>Мебель</item>
+        <item>Медицинские услуги</item>
+        <item>Обслуживание автомобиля</item>
+        <item>Одежда</item>
+        <item>Парикмахерская</item>
+        <item>Продукты</item>
+        <item>Развлечения</item>
+        <item>Спорт</item>
+        <item>Спортзал</item>
+        <item>Такси</item>
+        <item>Техника</item>
+        <item>Услуги связи</item>
+        <item>Экстренные расходы</item>
+        <item>Штрафы</item>
+        <item>Хобби</item>
+        <item>Коммунальные услуги</item>
+        <item>Подарки</item>
+        <item>Путешествия</item>
+        <item>Страховка</item>
+    </string-array>
+
+    <string-array name="income_categories">
+        <item>Аренда недвижимости</item>
+        <item>Бонусы</item>
+        <item>Дивиденды</item>
+        <item>Зарплата</item>
+        <item>Инвестиции</item>
+        <item>Краудфандинг</item>
+        <item>Наследство</item>
+        <item>Партнерская программа</item>
+        <item>Пенсия</item>
+        <item>Подарок</item>
+        <item>Подработка</item>
+        <item>Продажа активов</item>
+        <item>Продажа услуг</item>
+        <item>Стипендия</item>
+        <item>Торговля на бирже</item>
+        <item>Фриланс</item>
+        <item>Проценты по вкладам</item>
+        <item>Выигрыш</item>
+    </string-array>
+
+    <string-array name="charts_categories">
+        <item>Популярные категории трат (bar chart)</item>
+        <item>Популярные категории трат (donut chart)</item>
+        <item>Источники дохода по категориям (donut chart)</item>
+        <item>Траты по периодам (line chart)</item>
+        <item>Доходы по периодам (line chart)</item>
+        <item>Траты за последние 30 дней (line chart)</item>
+    </string-array>
+
+    <string-array name="transaction_categories">
+        <item>Все транзакции</item>
+        <item>Только траты</item>
+        <item>Только доходы</item>
+    </string-array>
+</resources>
