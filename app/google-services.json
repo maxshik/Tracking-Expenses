@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "925339290668",
+    "project_number": "",
     "project_id": "trackingexpenses-1fdfb",
     "storage_bucket": "trackingexpenses-1fdfb.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:925339290668:android:918a3a55175c1986ec5589",
+        "mobilesdk_app_id": "",
         "android_client_info": {
           "package_name": "com.example.trackingexpenses"
         }
       },
       "oauth_client": [
         {
-          "client_id": "925339290668-lsus0l01sndfgdjlp6esssdah22fbuaa.apps.googleusercontent.com",
+          "client_id": "",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.trackingexpenses",
-            "certificate_hash": "98b595a865fe1f8aa1a8c2fd43411682a1154c12"
+            "certificate_hash": ""
           }
         },
         {
-          "client_id": "9253239290668-ss0h2c1v5oanrussqbn2sor237sabcds.apps.googleusercontent.com",
+          "client_id": "",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCr9treMLEEv7httl0mFQfviv6AmlHptNY"
+          "current_key": ""
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "925339250668-9ksh2dsv5osnrawcqbn2sor237s5fdes.apps.googleusercontent.com",
+              "client_id": "",
               "client_type": 3
             }
           ]
