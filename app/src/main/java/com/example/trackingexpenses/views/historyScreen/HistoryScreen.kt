@@ -22,8 +22,9 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
+import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ALL_TRANSACTIONS
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.views.SelectSortTypeMenu
 import com.example.trackingexpenses.views.TransactionListItem
 import java.time.LocalDate
@@ -35,12 +36,12 @@ fun HistoryScreen(
     modifier: Modifier,
     transactionHistoryViewModel: TransactionHistoryViewModel,
     transactionManagementViewModel: TransactionManagementViewModel,
-    context: Context,
 ) {
     val allTransactions by transactionHistoryViewModel.allTransactions.observeAsState(emptyList())
     val selectedSortType = transactionHistoryViewModel.currentSortType.value
 
-    LaunchedEffect(selectedSortType) {
+    LaunchedEffect(Unit) {
+        transactionHistoryViewModel.currentSortType.value = ALL_TRANSACTIONS
         transactionHistoryViewModel.fetchAndFilterTransactions(selectedSortType)
     }
 

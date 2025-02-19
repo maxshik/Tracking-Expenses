@@ -1,8 +1,5 @@
 package com.example.trackingexpenses.views
 
-import android.content.Context
-import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -13,55 +10,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.activities.GraphicsActivity
-import com.example.trackingexpenses.activities.HistoryActivity
-import com.example.trackingexpenses.activities.MainActivity
-import com.example.trackingexpenses.activities.ProfileActivity
 
 data class BottomNavigationItem(
     val title: String,
-    val selectedIcon: Int,
-    val activityClass: Class<out ComponentActivity>,
+    val icon: Int,
+    val route: String,
 )
 
 @Composable
-fun BottomNavigationBar(currentActivity: Class<out ComponentActivity>, context: Context) {
+fun BottomNavigationBar(navController: NavHostController, currentRoute: String) {
     val items = listOf(
         BottomNavigationItem(
-            title = context.getString(R.string.main),
-            selectedIcon = R.drawable.homepage,
-            activityClass = MainActivity::class.java
+            title = "Главная",
+            icon = R.drawable.homepage,
+            route = "mainScreen"
         ),
         BottomNavigationItem(
-            title = context.getString(R.string.history),
-            selectedIcon = R.drawable.history,
-            activityClass = HistoryActivity::class.java
+            title = "История",
+            icon = R.drawable.history,
+            route = "history"
         ),
         BottomNavigationItem(
-            title = context.getString(R.string.graphics),
-            selectedIcon = R.drawable.graphic,
-            activityClass = GraphicsActivity::class.java
+            title = "Графики",
+            icon = R.drawable.graphic,
+            route = "graphics"
         ),
         BottomNavigationItem(
-            title = context.getString(R.string.profile),
-            selectedIcon = R.drawable.profile,
-            activityClass = ProfileActivity::class.java
+            title = "Профиль",
+            icon = R.drawable.profile,
+            route = "profile"
         )
     )
 
-    val selectedItemIndex = items.indexOfFirst { it.activityClass == currentActivity }
-
     NavigationBar {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
             NavigationBarItem(
-                selected = selectedItemIndex == index,
+                selected = currentRoute == item.route,
                 onClick = {
-                    if (currentActivity != item.activityClass) {
-                        val i = Intent(context, item.activityClass).apply {
-                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        }
-                        context.startActivity(i)
+                    navController.navigate(item.route) {
+                        launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 label = { Text(text = item.title) },
@@ -70,7 +60,7 @@ fun BottomNavigationBar(currentActivity: Class<out ComponentActivity>, context: 
                     BadgedBox(badge = { }) {
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            painter = painterResource(id = item.selectedIcon),
+                            painter = painterResource(id = item.icon),
                             contentDescription = null
                         )
                     }

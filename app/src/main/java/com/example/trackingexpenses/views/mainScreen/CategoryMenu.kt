@@ -28,9 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.toSize
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
 import com.example.trackingexpenses.objects.TypeOfTransactions.INCOME
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 
 @Composable
 fun CategoryMenu(type: String, categoriesViewModel: CategoriesViewModel, transactionManagementViewModel: TransactionManagementViewModel) {

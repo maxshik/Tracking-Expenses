@@ -1,9 +1,8 @@
 package com.example.trackingexpenses.views.mainScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,18 +11,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.example.trackingexpenses.R
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.viewModels.UserViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun GeneralInformation(userViewModel: UserViewModel) {
+fun GeneralInformation(userViewModel: UserViewModel, transactionManagementViewModel: TransactionManagementViewModel) {
     val incomeForPeriod by userViewModel.userIncomeForPeriod.collectAsState()
     val expensesForPeriod by userViewModel.userExpensesForPeriod.collectAsState()
     val userExpensesForDay by userViewModel.userExpensesForDay.collectAsState()
+    val dayLimit by userViewModel.dayLimit.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
+    var colorOfTodayExpenses = MaterialTheme.colorScheme.tertiary
+
+    if (transactionManagementViewModel.isLimitExceeded.value) {
+        colorOfTodayExpenses = androidx.compose.ui.graphics.Color.Red
+    }
+
+    transactionManagementViewModel.checkLimit(userExpensesForDay, dayLimit)
 
     Column(
         modifier = Modifier
@@ -71,7 +78,7 @@ fun GeneralInformation(userViewModel: UserViewModel) {
                 modifier = Modifier.padding(5.dp, end = 10.dp),
                 text = stringResource(id = R.string.expenses_today_text, userExpensesForDay),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = colorOfTodayExpenses,
                 fontWeight = FontWeight.W500
             )
         }
@@ -106,62 +113,12 @@ fun GeneralInformation(userViewModel: UserViewModel) {
     }
 
     if (showDialog) {
-        ConfirmationDialog(
+        ConfirmationDialogToIncreasePeriod(
             onDismiss = { showDialog = false },
             onConfirm = {
                 userViewModel.increasePeriod()
                 showDialog = false
             }
         )
-    }
-}
-
-@Composable
-fun ConfirmationDialog(
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
-) {
-    Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.confirmation_dialog_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.confirmation_dialog_message),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text(stringResource(id = R.string.cancel_button), color = MaterialTheme.colorScheme.tertiary)
-                    }
-                    Button(
-                        onClick = {
-                            onConfirm()
-                            onDismiss()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
-                        shape = RoundedCornerShape(30.dp),
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Text(stringResource(id = R.string.start_button), color = MaterialTheme.colorScheme.tertiary)
-                    }
-                }
-            }
-        }
     }
 }

@@ -184,8 +184,8 @@ class TransactionHistoryViewModel : ViewModel() {
                     for (document in result) {
                         val periodData = document.toObject(Period::class.java)
                         val period = periodData.period.toString()
-                        expensesData.add(Pair(periodData.expenses_for_the_period!!.toDouble(), period))
-                        incomeData.add(Pair(periodData.income_for_the_period!!.toDouble(), period))
+                        expensesData.add(Pair(periodData.expensesForThePeriod!!.toDouble(), period))
+                        incomeData.add(Pair(periodData.incomeForThePeriod!!.toDouble(), period))
                     }
 
                     expensesData.sortBy { it.second.toInt() }

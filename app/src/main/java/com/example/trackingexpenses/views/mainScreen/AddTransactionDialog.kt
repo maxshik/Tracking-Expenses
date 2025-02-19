@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 
 @Composable
 fun AddTransactionDialog(

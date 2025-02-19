@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime

@@ -67,6 +67,7 @@ dependencies {
     implementation("androidx.credentials:credentials:1.0.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.0.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation ("androidx.navigation:navigation-compose:2.8.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

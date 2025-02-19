@@ -3,12 +3,14 @@ package com.example.trackingexpenses.views.graphicsScreen
 import androidx.compose.foundation.lazy.LazyColumn
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.trackingexpenses.objects.ChartTypes
+import com.example.trackingexpenses.objects.ChartTypes.POPULAR_EXPENSES_BAR_CHART
 import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ONLY_EXPENSES
 import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ONLY_INCOME
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
@@ -36,13 +38,22 @@ fun GraphicScreen(
 
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        transactionHistoryViewModel.currentSortType.value =
+            POPULAR_EXPENSES_BAR_CHART
+
+        transactionHistoryViewModel.fetchPopularCategoriesOfExpenses()
+        transactionHistoryViewModel.fetchTransactionsLast30Days()
+        transactionHistoryViewModel.fetchPeriodsData()
+    }
+
     LazyColumn(modifier) {
         item {
             SelectSortTypeMenu(transactionHistoryViewModel, categories)
         }
         item {
             when (transactionHistoryViewModel.currentSortType.value) {
-                ChartTypes.POPULAR_EXPENSES_BAR_CHART -> {
+                POPULAR_EXPENSES_BAR_CHART -> {
                     BarchartBars(popularCategories, context)
                 }
 

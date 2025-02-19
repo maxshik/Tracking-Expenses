@@ -31,14 +31,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.activities.RegistrationActivity
 
 @Composable
 fun LoginScreen(
     onGoogleSignIn: () -> Unit,
     onResetPassword: (String) -> Unit,
     onSignInWithEmail: (String, String) -> Unit,
+    navController: NavHostController
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -163,8 +164,7 @@ fun LoginScreen(
         }
 
         TextButton(onClick = {
-            val intent = Intent(context, RegistrationActivity::class.java)
-            context.startActivity(intent)
+            navController.navigate("registration")
         }) {
             Text(
                 text = stringResource(id = R.string.login_register),

@@ -1,8 +1,9 @@
-package com.example.trackingexpenses.mainScreen.viewModels
+package com.example.trackingexpenses.viewModels
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
 import com.example.trackingexpenses.models.Transaction
 import com.example.trackingexpenses.models.User
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
@@ -14,15 +15,24 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TransactionManagementViewModel(private val categoriesViewModel: CategoriesViewModel) : ViewModel() {
+class TransactionManagementViewModel(private val categoriesViewModel: CategoriesViewModel) :
+    ViewModel() {
     var coast = mutableStateOf("")
     var notes = mutableStateOf("")
     val date = mutableStateOf("")
     val category = mutableStateOf("")
     val time = mutableStateOf("")
 
+    val isLimitExceeded = mutableStateOf(false)
+
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+
+    fun checkLimit(newExpensesForDay: Float, dayLimit: Float?) {
+        if (newExpensesForDay > (dayLimit?.toFloat() ?: Float.MAX_VALUE)) {
+            isLimitExceeded.value = true
+        }
+    }
 
     fun addTransaction(
         type: String,
@@ -43,32 +53,39 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                 if (userDocument.exists()) {
                     val user = userDocument.toObject(User::class.java)
 
-                    val transactionDate = LocalDate.parse(newTransaction.date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    val transactionDate = LocalDate.parse(
+                        newTransaction.date,
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                    )
                     val today = LocalDate.now()
 
-                    if (newTransaction.period == user?.current_period) {
+                    if (newTransaction.period == user?.currentPeriod) {
                         when (type) {
                             EXPENSES -> {
+                                val newExpensesForDay = if (transactionDate.isEqual(today)) {
+                                    (user.expensesForDay + newTransaction.coast.toFloat()).toDouble()
+                                } else {
+                                    user.expensesForDay.toDouble()
+                                }
+
+                                checkLimit(newExpensesForDay.toFloat(), user.dayLimit)
+
                                 userDocRef.update(
-                                    "total_expenditure",
-                                    (user.total_expenditure + newTransaction.coast.toFloat()).toDouble(),
-                                    "expenses_for_day",
-                                    if (transactionDate.isEqual(today)) {
-                                        (user.expenses_for_day + newTransaction.coast.toFloat()).toDouble()
-                                    } else {
-                                        user.expenses_for_day.toDouble()
-                                    },
-                                    "expenses_for_the_period",
-                                    (user.expenses_for_the_period + newTransaction.coast.toFloat()).toDouble()
+                                    "totalExpenditure",
+                                    (user.totalExpenditure + newTransaction.coast.toFloat()).toDouble(),
+                                    "expensesForDay",
+                                    newExpensesForDay,
+                                    "expensesForThePeriod",
+                                    (user.expensesForThePeriod + newTransaction.coast.toFloat()).toDouble()
                                 )
                             }
 
                             INCOME -> {
                                 userDocRef.update(
-                                    "total_income",
-                                    (user.total_income + newTransaction.coast.toFloat()).toDouble(),
-                                    "income_for_the_period",
-                                    (user.income_for_the_period + newTransaction.coast.toFloat()).toDouble()
+                                    "totalIncome",
+                                    (user.totalIncome + newTransaction.coast.toFloat()).toDouble(),
+                                    "incomeForThePeriod",
+                                    (user.incomeForThePeriod + newTransaction.coast.toFloat()).toDouble()
                                 )
                             }
                         }
@@ -119,25 +136,35 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                         if (userDocument.exists()) {
                             val user = userDocument.toObject(User::class.java)
 
-                            if (transaction?.period == user?.current_period) {
+                            if (transaction?.period == user?.currentPeriod) {
                                 when (transaction?.type) {
                                     EXPENSES -> {
                                         userDocRef.update(
-                                            "total_expenditure",
-                                            FieldValue.increment(-transaction.coast.toFloat().toDouble()),
-                                            "expenses_for_the_period",
-                                            FieldValue.increment(-transaction.coast.toFloat().toDouble()),
-                                            "expenses_for_day",
-                                            FieldValue.increment(-transaction.coast.toFloat().toDouble())
+                                            "totalExpenditure",
+                                            FieldValue.increment(
+                                                -transaction.coast.toFloat().toDouble()
+                                            ),
+                                            "expensesForThePeriod",
+                                            FieldValue.increment(
+                                                -transaction.coast.toFloat().toDouble()
+                                            ),
+                                            "expensesForDay",
+                                            FieldValue.increment(
+                                                -transaction.coast.toFloat().toDouble()
+                                            )
                                         )
                                     }
 
                                     INCOME -> {
                                         userDocRef.update(
-                                            "total_income",
-                                            FieldValue.increment(-transaction.coast.toFloat().toDouble()),
-                                            "income_for_the_period",
-                                            FieldValue.increment(-transaction.coast.toFloat().toDouble())
+                                            "totalIncome",
+                                            FieldValue.increment(
+                                                -transaction.coast.toFloat().toDouble()
+                                            ),
+                                            "incomeForThePeriod",
+                                            FieldValue.increment(
+                                                -transaction.coast.toFloat().toDouble()
+                                            )
                                         )
                                     }
                                 }
@@ -172,12 +199,12 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                         val type = transaction.type
                         if (type == EXPENSES) {
                             doc.reference.update(
-                                "expenses_for_the_period",
+                                "expensesForThePeriod",
                                 FieldValue.increment(amountChange.toDouble())
                             )
                         } else if (type == INCOME) {
                             doc.reference.update(
-                                "income_for_the_period",
+                                "incomeForThePeriod",
                                 FieldValue.increment(amountChange.toDouble())
                             )
                         }

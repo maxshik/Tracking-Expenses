@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.trackingexpenses.activities.LoginActivity
-import com.example.trackingexpenses.activities.ProfileActivity
+import com.example.trackingexpenses.activities.MainActivity
 import com.example.trackingexpenses.models.Period
 import com.example.trackingexpenses.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +40,9 @@ class UserViewModel : ViewModel() {
     private var _userExpensesForDay = MutableStateFlow(0f)
     val userExpensesForDay: StateFlow<Float> get() = _userExpensesForDay
 
+    private var _dayLimit = MutableStateFlow(0f)
+    val dayLimit: StateFlow<Float> get() = _dayLimit
+
     private var _spendInPercent = MutableStateFlow(0f)
     val spendInPercent: StateFlow<Float> get() = _spendInPercent
 
@@ -64,7 +67,7 @@ class UserViewModel : ViewModel() {
     }
 
     private fun setDateOfLastEnterInApp() {
-        userDocRef?.update("last_enter_in_app", currentDate)
+        userDocRef?.update("lastEnterInApp", currentDate)
             ?.addOnSuccessListener {
                 Log.d("Firestore", "Дата последнего входа успешно обновлена.")
             }
@@ -78,10 +81,10 @@ class UserViewModel : ViewModel() {
             if (userDocument.exists()) {
                 val user = userDocument.toObject(User::class.java)
 
-                val lastEnterDate = user?.last_enter_in_app
+                val lastEnterDate = user?.lastEnterInApp
 
                 if (lastEnterDate != currentDate) {
-                    userDocRef.update("expenses_for_day", 0f)
+                    userDocRef.update("expensesForDay", 0f)
                         .addOnSuccessListener {
                             Log.d("Firestore", "Поле expenses_for_day успешно обновлено на 0.")
                             setDateOfLastEnterInApp()
@@ -105,12 +108,12 @@ class UserViewModel : ViewModel() {
                 if (userDocument.exists()) {
                     val user = userDocument.toObject(User::class.java)
 
-                    val newPeriod = user?.current_period ?: 0
+                    val newPeriod = user?.currentPeriod ?: 0
 
                     val newPeriodData = Period(
                         period = newPeriod,
-                        expenses_for_the_period = user?.expenses_for_the_period,
-                        income_for_the_period = user?.income_for_the_period
+                        expensesForThePeriod = user?.expensesForThePeriod,
+                        incomeForThePeriod = user?.incomeForThePeriod
                     )
 
                     db.collection("periods")
@@ -121,11 +124,11 @@ class UserViewModel : ViewModel() {
                                 "New period data saved successfully with ID: ${documentReference.id}"
                             )
 
-                            userDocRef.update("current_period", newPeriod + 1)
+                            userDocRef.update("currentPeriod", newPeriod + 1)
 
                             userDocRef.update(
-                                "income_for_the_period", 0f,
-                                "expenses_for_the_period", 0f
+                                "incomeForThePeriod", 0f,
+                                "expensesForThePeriod", 0f
                             )
                         }
                         .addOnFailureListener { e ->
@@ -148,12 +151,13 @@ class UserViewModel : ViewModel() {
 
             if (documentSnapshot != null && documentSnapshot.exists()) {
                 val user = documentSnapshot.toObject(User::class.java)
-                _userTotalIncome.value = user?.total_income ?: 0f
-                _userTotalExpenditure.value = user?.total_expenditure ?: 0f
-                _userExpensesForPeriod.value = user?.expenses_for_the_period ?: 0f
-                _userIncomeForPeriod.value = user?.income_for_the_period ?: 0f
-                _userExpensesForDay.value = user?.expenses_for_day ?: 0f
-                userCurrentPeriod.intValue = user?.current_period ?: 1
+                _userTotalIncome.value = user?.totalIncome ?: 0f
+                _userTotalExpenditure.value = user?.totalExpenditure ?: 0f
+                _userExpensesForPeriod.value = user?.expensesForThePeriod ?: 0f
+                _userIncomeForPeriod.value = user?.incomeForThePeriod ?: 0f
+                _userExpensesForDay.value = user?.expensesForDay ?: 0f
+                _dayLimit.value = user?.dayLimit ?: 0f
+                userCurrentPeriod.intValue = user?.currentPeriod ?: 1
 
                 _userPhotoUrl.value = auth.currentUser?.photoUrl
                 _userDisplayName.value = auth.currentUser?.displayName
@@ -169,7 +173,6 @@ class UserViewModel : ViewModel() {
     private fun calculateExpensesInPercent() {
         val totalIncome = _userTotalIncome.value
         val totalExpenditure = _userTotalExpenditure.value
-        Log.i("TestTest", totalExpenditure.toString())
 
         _spendInPercent.value = if (totalIncome + totalExpenditure > 0) {
             totalExpenditure / (totalIncome + totalExpenditure)
@@ -182,8 +185,12 @@ class UserViewModel : ViewModel() {
 
     fun signOut(context: Context) {
         auth.signOut()
-        (context as ProfileActivity).finish()
+        (context as MainActivity).finish()
         val i = Intent(context, LoginActivity::class.java)
         context.startActivity(i)
+    }
+
+    fun setDayLimit(limit: Float) {
+        userDocRef?.update("dayLimit", limit)
     }
 }

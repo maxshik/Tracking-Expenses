@@ -19,10 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.models.Transaction
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
 import com.example.trackingexpenses.objects.TypeOfTransactions.INCOME
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.viewModels.UserViewModel
 import com.google.firebase.Timestamp
 import java.time.LocalDate
@@ -89,7 +89,7 @@ fun ActionsWithBalance(
                 transactionManagementViewModel.addTransaction(
                     EXPENSES,
                     transactionManagementViewModel.category.value,
-                    newExpenditure
+                    newExpenditure,
                 ) { documentId ->
                     Log.i("Test", documentId)
                 }
@@ -126,6 +126,7 @@ fun ActionsWithBalance(
                 ) { documentId ->
                     Log.i("Test", documentId)
                 }
+
                 showDialogWithAddIncome.value = false
 
                 zeroingOutFields()

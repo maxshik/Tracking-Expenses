@@ -48,10 +48,13 @@
     <string name="registration_return_to_main">Вернуться на главную</string>
     <string name="add_expenses">Добавить расход</string>
     <string name="add_income">Добавить доход</string>
+    <string name="add">Добавить</string>
+    <string name="please_enter_sum">Пожалуйста, введите сумму!</string>
     <string name="add_transaction_title">Заполните все поля</string>
     <string name="enter_expense_amount">Введите потраченную сумму</string>
     <string name="enter_income_amount">Введите заработанную сумму</string>
     <string name="notes_label">Заметки (не более 50 сим.)</string>
+    <string name="notes">Заметки</string>
     <string name="notes_error">Заметки не могут превышать 50 символов</string>
     <string name="mandatory_fields_error">Пожалуйста, заполните все обязательные поля.</string>
     <string name="add_button">Добавить</string>
@@ -66,6 +69,8 @@
     <string name="start_new_period">Начать новый период</string>
     <string name="confirmation_dialog_title">Вы уверены, что хотите начать новый период?</string>
     <string name="confirmation_dialog_message">Это нужно, чтобы вы самостоятельно отмеряли промежутки времени, а после смотреть на графиках траты за определенные периоды.</string>
+    <string name="set_day_limit_dialog_title">Введите сумму, которая будет лимитом трат на день</string>
+    <string name="set_day_limit_dialog_message">Учтите, что мы никак не можем запретить вам тратить больше денег. В случае превышения лимита вам будет выслано уведомление об этом.</string>
     <string name="start_button">Начать</string>
     <string name="recent_transactions">Недавние транзакции</string>
     <string name="statistics_title">Статистика за все время</string>
@@ -78,4 +83,6 @@
     <string name="sign_out_button">Выйти из аккаунта</string>
     <string name="date">Дата</string>
     <string name="delete">Удалить</string>
+    <string name="github_link">https://github.com/maxshik/Tracking-Expenses</string>
+    <string name="enter_money">Введите лимит на день</string>
 </resources>

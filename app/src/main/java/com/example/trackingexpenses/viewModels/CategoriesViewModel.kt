@@ -23,7 +23,7 @@ class CategoriesViewModel : ViewModel() {
         loadIncomeCategories()
     }
 
-    fun loadIncomeCategories() {
+    private fun loadIncomeCategories() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
             db.collection("categoriesOfIncome")
@@ -69,7 +69,7 @@ class CategoriesViewModel : ViewModel() {
         }
     }
 
-    fun loadCategories() {
+    private fun loadCategories() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
             db.collection("categoriesOfExpenditure")

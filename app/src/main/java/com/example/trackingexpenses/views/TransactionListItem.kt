@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.models.Transaction
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 
 @Composable
 fun TransactionListItem(
@@ -125,7 +125,7 @@ fun TransactionListItem(
                 if (transaction.notes.isNotEmpty()) {
                     Text(
                         modifier = Modifier.padding(2.dp),
-                        text = stringResource(id = R.string.notes_label) + ": ${transaction.notes}",
+                        text = stringResource(id = R.string.notes) + ": ${transaction.notes}",
                         color = MaterialTheme.colorScheme.tertiary
                     )
                 }

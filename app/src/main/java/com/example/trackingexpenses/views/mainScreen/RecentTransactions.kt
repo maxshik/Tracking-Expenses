@@ -29,17 +29,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.trackingexpenses.activities.HistoryActivity
+import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.mainScreen.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
+import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.views.TransactionListItem
 
 @Composable
 fun RecentTransactions(
     transactionManagementViewModel: TransactionManagementViewModel,
     transactionHistoryViewModel: TransactionHistoryViewModel,
-    context: Context,
+    navController: NavHostController
 ) {
     val transactions by transactionHistoryViewModel.recentTransactions.observeAsState(emptyList())
 
@@ -55,10 +55,7 @@ fun RecentTransactions(
             modifier = Modifier.fillMaxWidth()
                 .padding(10.dp)
                 .clickable(onClick = {
-                    val i = Intent(context, HistoryActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    }
-                    context.startActivity(i)
+                    navController.navigate("history")
                 }),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
