@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class UserViewModel : ViewModel() {
+
     private val db: FirebaseFirestore = Firebase.firestore
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
