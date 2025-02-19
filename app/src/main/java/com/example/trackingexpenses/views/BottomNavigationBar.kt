@@ -1,5 +1,6 @@
 package com.example.trackingexpenses.views
 
+import android.content.Context
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -12,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
+import com.example.trackingexpenses.objects.Routes
 
 data class BottomNavigationItem(
     val title: String,
@@ -20,27 +22,27 @@ data class BottomNavigationItem(
 )
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController, currentRoute: String) {
+fun BottomNavigationBar(navController: NavHostController, currentRoute: String, context: Context) {
     val items = listOf(
         BottomNavigationItem(
-            title = "Главная",
+            title = context.getString(R.string.main),
             icon = R.drawable.homepage,
-            route = "mainScreen"
+            route = Routes.MAIN_SCREEN
         ),
         BottomNavigationItem(
-            title = "История",
+            title = context.getString(R.string.history),
             icon = R.drawable.history,
-            route = "history"
+            route = Routes.HISTORY
         ),
         BottomNavigationItem(
-            title = "Графики",
+            title = context.getString(R.string.graphics),
             icon = R.drawable.graphic,
-            route = "graphics"
+            route = Routes.GRAPHICS
         ),
         BottomNavigationItem(
-            title = "Профиль",
+            title = context.getString(R.string.profile),
             icon = R.drawable.profile,
-            route = "profile"
+            route = Routes.PROFILE
         )
     )
 

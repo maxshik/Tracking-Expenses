@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
+import com.example.trackingexpenses.objects.Routes
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModelFactory
 import com.example.trackingexpenses.viewModels.UserViewModel
@@ -56,8 +57,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             TrackingExpensesTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "mainScreen") {
-                    composable("mainScreen") {
+                val context = LocalContext.current
+
+                NavHost(navController = navController, startDestination = Routes.MAIN_SCREEN) {
+                    composable(Routes.MAIN_SCREEN) {
                         Scaffold(
                             content = { innerPadding ->
                                 MainScreen(
@@ -70,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                             bottomBar = {
-                                BottomNavigationBar(navController, "mainScreen")
+                                BottomNavigationBar(navController, Routes.MAIN_SCREEN, context)
                             },
                             topBar = {
                                 UpperMenu("${getString(R.string.my_finance)} | $currentDate")
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable("history") {
+                    composable(Routes.HISTORY) {
                         Scaffold(
                             content = { innerPadding ->
                                 HistoryScreen(
@@ -88,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                             bottomBar = {
-                                BottomNavigationBar(navController, "history")
+                                BottomNavigationBar(navController, Routes.HISTORY, context)
                             },
                             topBar = {
                                 UpperMenu(getString(R.string.transaction_history))
@@ -96,7 +99,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable("graphics") {
+                    composable(Routes.GRAPHICS) {
                         Scaffold(content = { innerPadding ->
                             GraphicScreen(
                                 Modifier.padding(innerPadding),
@@ -104,14 +107,14 @@ class MainActivity : ComponentActivity() {
                                 transactionHistoryViewModel
                             )
                         }, bottomBar = {
-                            BottomNavigationBar(navController, "graphics")
+                            BottomNavigationBar(navController, Routes.GRAPHICS, context)
                         }, topBar = {
                             UpperMenu(getString(R.string.graphics))
                         })
 
                     }
 
-                    composable("profile") {
+                    composable(Routes.PROFILE) {
                         Scaffold(content = { innerPadding ->
                             ProfileScreen(
                                 Modifier.padding(innerPadding),
@@ -119,7 +122,7 @@ class MainActivity : ComponentActivity() {
                                 LocalContext.current
                             )
                         }, bottomBar = {
-                            BottomNavigationBar(navController, "profile")
+                            BottomNavigationBar(navController, Routes.PROFILE, context)
                         }, topBar = {
                             UpperMenu(getString(R.string.profile))
                         })

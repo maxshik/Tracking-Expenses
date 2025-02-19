@@ -19,6 +19,9 @@ import co.yml.charts.common.extensions.isNotNull
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.views.logInToTheApp.LoginScreen
 import com.example.trackingexpenses.models.User
+import com.example.trackingexpenses.objects.Routes
+import com.example.trackingexpenses.objects.Routes.LOGIN
+import com.example.trackingexpenses.objects.Routes.REGISTRATION
 import com.example.trackingexpenses.ui.theme.TrackingExpensesTheme
 import com.example.trackingexpenses.views.logInToTheApp.RegistrationScreen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -49,8 +52,8 @@ class LoginActivity : ComponentActivity() {
 
             TrackingExpensesTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "login") {
-                    composable("login") {
+                NavHost(navController = navController, startDestination = LOGIN) {
+                    composable(LOGIN) {
                         LoginScreen(
                             onGoogleSignIn = { signInWithGoogle() },
                             onResetPassword = { email -> resetPassword(email, context, auth) },
@@ -61,7 +64,7 @@ class LoginActivity : ComponentActivity() {
                         )
                     }
 
-                    composable("registration") {
+                    composable(REGISTRATION) {
                         TrackingExpensesTheme() {
                             RegistrationScreen(context, ::createAccount)
                         }

@@ -1,7 +1,5 @@
 package com.example.trackingexpenses.views.mainScreen
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
+import com.example.trackingexpenses.objects.Routes.HISTORY
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.views.TransactionListItem
@@ -55,7 +54,7 @@ fun RecentTransactions(
             modifier = Modifier.fillMaxWidth()
                 .padding(10.dp)
                 .clickable(onClick = {
-                    navController.navigate("history")
+                    navController.navigate(HISTORY)
                 }),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
