@@ -39,8 +39,8 @@ class TransactionHistoryViewModel : ViewModel() {
         if (userId != null) {
             db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection(Collections.TRANSACTIONS)
-                .orderBy("dateTime", Query.Direction.DESCENDING)
+                .collection(Fields.TRANSACTION)
+                .orderBy(Fields.DATE_TIME, Query.Direction.DESCENDING)
                 .limit(5)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
@@ -60,7 +60,7 @@ class TransactionHistoryViewModel : ViewModel() {
         if (userId != null) {
             db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection(Collections.TRANSACTIONS)
+                .collection(Fields.TRANSACTION)
                 .orderBy(Fields.DATE_TIME, Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
@@ -88,7 +88,7 @@ class TransactionHistoryViewModel : ViewModel() {
         if (userId != null) {
             db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection(Collections.TRANSACTIONS)
+                .collection(Fields.TRANSACTION)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.e("Firestore Error", "Listen failed.", e)
@@ -133,7 +133,7 @@ class TransactionHistoryViewModel : ViewModel() {
 
             db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection(Collections.TRANSACTIONS)
+                .collection(Fields.TRANSACTION)
                 .whereGreaterThan(Fields.DATE_TIME, startDate)
                 .whereLessThan(Fields.DATE_TIME, endDate)
                 .whereEqualTo(Fields.TYPE, EXPENSES)

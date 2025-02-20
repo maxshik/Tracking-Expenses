@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,10 +25,17 @@ fun GeneralInformation(userViewModel: UserViewModel, transactionManagementViewMo
     val dayLimit by userViewModel.dayLimit.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
-    var colorOfTodayExpenses = MaterialTheme.colorScheme.tertiary
+    val colorOfTodayExpenses: Color;
 
     if (transactionManagementViewModel.isLimitExceeded.value) {
-        colorOfTodayExpenses = androidx.compose.ui.graphics.Color.Red
+        Log.i("RED", transactionManagementViewModel.isLimitExceeded.value.toString())
+
+        colorOfTodayExpenses = Color.Red
+    }
+    else {
+        Log.i("WHITE", transactionManagementViewModel.isLimitExceeded.value.toString())
+
+        colorOfTodayExpenses = MaterialTheme.colorScheme.tertiary
     }
 
     transactionManagementViewModel.checkLimit(userExpensesForDay, dayLimit)

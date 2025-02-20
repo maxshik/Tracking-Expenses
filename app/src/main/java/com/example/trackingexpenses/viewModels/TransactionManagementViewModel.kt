@@ -34,6 +34,9 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
         if (newExpensesForDay > (dayLimit?.toFloat() ?: Float.MAX_VALUE)) {
             isLimitExceeded.value = true
         }
+        else {
+            isLimitExceeded.value = false
+        }
     }
 
     fun addTransaction(
@@ -95,13 +98,13 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
 
                     db.collection(Collections.TRANSACTIONS)
                         .document(userId)
-                        .collection(Collections.TRANSACTIONS)
+                        .collection(Fields.TRANSACTION)
                         .add(newTransaction)
                         .addOnSuccessListener { document ->
                             val updatedTransaction = newTransaction.copy(id = document.id)
                             db.collection(Collections.TRANSACTIONS)
                                 .document(userId)
-                                .collection(Collections.TRANSACTIONS)
+                                .collection(Fields.TRANSACTION)
                                 .document(document.id)
                                 .set(updatedTransaction)
                                 .addOnSuccessListener {
@@ -126,7 +129,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
         if (userId != null) {
             val transactionDocRef = db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection(Collections.TRANSACTIONS)
+                .collection(Fields.TRANSACTION)
                 .document(transactionId)
 
             transactionDocRef.get().addOnSuccessListener { document ->
@@ -150,7 +153,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             ),
-                                            Fields.EXPENSES_FOR_DAY,
+                                            "expensesForDay",
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             )
@@ -171,6 +174,11 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                     }
                                 }
                             }
+
+                            checkLimit(user?.expensesForDay ?: 0f, user?.dayLimit ?: 0f)
+
+                            Log.i("huy", user?.expensesForDay.toString())
+                            Log.i("huy", user?.dayLimit.toString() + "limitday")
 
                             updatePeriodData(transaction, -transaction?.coast!!.toFloat())
 
@@ -206,7 +214,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                             )
                         } else if (type == INCOME) {
                             doc.reference.update(
-                                Fields.EXPENSES_FOR_THE_PERIOD,
+                                Fields.INCOME_FOR_THE_PERIOD,
                                 FieldValue.increment(amountChange.toDouble())
                             )
                         }

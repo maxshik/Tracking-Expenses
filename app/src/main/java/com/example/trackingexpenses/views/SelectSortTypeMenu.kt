@@ -21,7 +21,7 @@ import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
 @Composable
 fun SelectSortTypeMenu(transactionHistoryViewModel: TransactionHistoryViewModel, categories: Set<String>) {
     var expanded by remember { mutableStateOf(false) }
-    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon: ImageVector =
         if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
@@ -33,7 +33,7 @@ fun SelectSortTypeMenu(transactionHistoryViewModel: TransactionHistoryViewModel,
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    textfieldSize = coordinates.size.toSize()
+                    textFieldSize = coordinates.size.toSize()
                 },
             label = { Text(stringResource(R.string.choice_category), color = MaterialTheme.colorScheme.tertiary) },
             trailingIcon = {
@@ -44,7 +44,7 @@ fun SelectSortTypeMenu(transactionHistoryViewModel: TransactionHistoryViewModel,
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+            modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             categories.forEach { suggestion ->
                 DropdownMenuItem(onClick = {

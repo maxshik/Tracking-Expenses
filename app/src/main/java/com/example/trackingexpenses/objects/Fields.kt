@@ -14,4 +14,5 @@ object Fields {
     const val LAST_ENTER_IN_APP = "lastEnterInApp"
     const val CURRENT_PERIOD = "currentPeriod"
     const val DAY_LIMIT = "dayLimit"
+    const val TRANSACTION = "transaction"
 }
