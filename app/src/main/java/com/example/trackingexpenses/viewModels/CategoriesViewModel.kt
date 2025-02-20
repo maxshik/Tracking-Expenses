@@ -3,6 +3,8 @@ package com.example.trackingexpenses.mainScreen.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.trackingexpenses.objects.Collections
+import com.example.trackingexpenses.objects.Fields
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -26,13 +28,13 @@ class CategoriesViewModel : ViewModel() {
     private fun loadIncomeCategories() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("categoriesOfIncome")
+            db.collection(Collections.CATEGORIES_OF_INCOME)
                 .document(userId)
                 .get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         val fetchedIncomeCategories =
-                            document.get("categoriesOfIncome") as? List<String>
+                            document.get(Fields.CATEGORIES_OF_INCOME) as? List<String>
                         _categoriesOfIncome.value =
                             fetchedIncomeCategories?.toMutableList()?.sorted()?.toMutableList()
                                 ?: mutableListOf()
@@ -63,22 +65,22 @@ class CategoriesViewModel : ViewModel() {
     private fun updateCategoriesOfIncome(categories: MutableList<String>) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("categoriesOfIncome")
+            db.collection(Collections.CATEGORIES_OF_INCOME)
                 .document(userId)
-                .set(mapOf("categoriesOfIncome" to categories))
+                .set(mapOf(Fields.CATEGORIES_OF_INCOME to categories))
         }
     }
 
     private fun loadCategories() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("categoriesOfExpenditure")
+            db.collection(Collections.CATEGORIES_IF_EXPENDITURE)
                 .document(userId)
                 .get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         val fetchedCategories =
-                            document.get("categoriesOfExpenditure") as? List<String>
+                            document.get(Fields.CATEGORIES_OF_EXPENDITURE) as? List<String>
                         _categoriesOfExpenditure.value =
                             fetchedCategories?.toMutableList()?.sorted()?.toMutableList()
                                 ?: mutableListOf()
@@ -109,9 +111,9 @@ class CategoriesViewModel : ViewModel() {
     private fun updateCategoriesOfExpenditure(categories: MutableList<String>) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("categoriesOfExpenditure")
+            db.collection(Collections.CATEGORIES_IF_EXPENDITURE)
                 .document(userId)
-                .set(mapOf("categoriesOfExpenditure" to categories))
+                .set(mapOf(Fields.CATEGORIES_OF_EXPENDITURE to categories))
         }
     }
 }

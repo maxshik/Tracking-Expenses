@@ -11,6 +11,8 @@ import com.example.trackingexpenses.activities.LoginActivity
 import com.example.trackingexpenses.activities.MainActivity
 import com.example.trackingexpenses.models.Period
 import com.example.trackingexpenses.models.User
+import com.example.trackingexpenses.objects.Collections
+import com.example.trackingexpenses.objects.Fields
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -58,7 +60,7 @@ class UserViewModel : ViewModel() {
     val userEmail: StateFlow<String?> get() = _userEmail
 
     private val userId = auth.currentUser?.uid
-    private val userDocRef = userId?.let { db.collection("users").document(it) }
+    private val userDocRef = userId?.let { db.collection(Collections.USERS).document(it) }
     private val currentDate =
         LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru", "RU")))
 
@@ -67,7 +69,7 @@ class UserViewModel : ViewModel() {
     }
 
     private fun setDateOfLastEnterInApp() {
-        userDocRef?.update("lastEnterInApp", currentDate)
+        userDocRef?.update(Fields.LAST_ENTER_IN_APP, currentDate)
             ?.addOnSuccessListener {
                 Log.d("Firestore", "Дата последнего входа успешно обновлена.")
             }
@@ -84,7 +86,7 @@ class UserViewModel : ViewModel() {
                 val lastEnterDate = user?.lastEnterInApp
 
                 if (lastEnterDate != currentDate) {
-                    userDocRef.update("expensesForDay", 0f)
+                    userDocRef.update(Fields.EXPENSES_FOR_DAY, 0f)
                         .addOnSuccessListener {
                             Log.d("Firestore", "Поле expenses_for_day успешно обновлено на 0.")
                             setDateOfLastEnterInApp()
@@ -102,7 +104,7 @@ class UserViewModel : ViewModel() {
 
     fun increasePeriod() {
         userId?.let { userId ->
-            val userDocRef = db.collection("users").document(userId)
+            val userDocRef = db.collection(Collections.USERS).document(userId)
 
             userDocRef.get().addOnSuccessListener { userDocument ->
                 if (userDocument.exists()) {
@@ -116,7 +118,7 @@ class UserViewModel : ViewModel() {
                         incomeForThePeriod = user?.incomeForThePeriod
                     )
 
-                    db.collection("periods")
+                    db.collection(Collections.PERIODS)
                         .add(newPeriodData)
                         .addOnSuccessListener { documentReference ->
                             Log.d(
@@ -124,10 +126,10 @@ class UserViewModel : ViewModel() {
                                 "New period data saved successfully with ID: ${documentReference.id}"
                             )
 
-                            userDocRef.update("currentPeriod", newPeriod + 1)
+                            userDocRef.update(Fields.CURRENT_PERIOD, newPeriod + 1)
 
                             userDocRef.update(
-                                "incomeForThePeriod", 0f,
+                                Fields.INCOME_FOR_THE_PERIOD, 0f,
                                 "expensesForThePeriod", 0f
                             )
                         }
@@ -191,6 +193,6 @@ class UserViewModel : ViewModel() {
     }
 
     fun setDayLimit(limit: Float) {
-        userDocRef?.update("dayLimit", limit)
+        userDocRef?.update(Fields.DAY_LIMIT, limit)
     }
 }

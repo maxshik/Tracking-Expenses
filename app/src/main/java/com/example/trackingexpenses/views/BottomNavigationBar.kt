@@ -13,13 +13,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.trackingexpenses.R
+import com.example.trackingexpenses.models.BottomNavigationItem
 import com.example.trackingexpenses.objects.Routes
-
-data class BottomNavigationItem(
-    val title: String,
-    val icon: Int,
-    val route: String,
-)
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController, currentRoute: String, context: Context) {

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
 import com.example.trackingexpenses.models.Transaction
 import com.example.trackingexpenses.models.User
+import com.example.trackingexpenses.objects.Collections
+import com.example.trackingexpenses.objects.Fields
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
 import com.example.trackingexpenses.objects.TypeOfTransactions.INCOME
 import com.google.firebase.auth.ktx.auth
@@ -47,7 +49,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
 
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            val userDocRef = db.collection("users").document(userId)
+            val userDocRef = db.collection(Collections.USERS).document(userId)
 
             userDocRef.get().addOnSuccessListener { userDocument ->
                 if (userDocument.exists()) {
@@ -71,35 +73,35 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                 checkLimit(newExpensesForDay.toFloat(), user.dayLimit)
 
                                 userDocRef.update(
-                                    "totalExpenditure",
+                                    Fields.TOTAL_EXPENDITURE,
                                     (user.totalExpenditure + newTransaction.coast.toFloat()).toDouble(),
-                                    "expensesForDay",
+                                    Fields.EXPENSES_FOR_DAY,
                                     newExpensesForDay,
-                                    "expensesForThePeriod",
+                                    Fields.EXPENSES_FOR_THE_PERIOD,
                                     (user.expensesForThePeriod + newTransaction.coast.toFloat()).toDouble()
                                 )
                             }
 
                             INCOME -> {
                                 userDocRef.update(
-                                    "totalIncome",
+                                    Fields.TOTAL_INCOME,
                                     (user.totalIncome + newTransaction.coast.toFloat()).toDouble(),
-                                    "incomeForThePeriod",
+                                    Fields.INCOME_FOR_THE_PERIOD,
                                     (user.incomeForThePeriod + newTransaction.coast.toFloat()).toDouble()
                                 )
                             }
                         }
                     }
 
-                    db.collection("transactions")
+                    db.collection(Collections.TRANSACTIONS)
                         .document(userId)
-                        .collection("transaction")
+                        .collection(Collections.TRANSACTIONS)
                         .add(newTransaction)
                         .addOnSuccessListener { document ->
                             val updatedTransaction = newTransaction.copy(id = document.id)
-                            db.collection("transactions")
+                            db.collection(Collections.TRANSACTIONS)
                                 .document(userId)
-                                .collection("transaction")
+                                .collection(Collections.TRANSACTIONS)
                                 .document(document.id)
                                 .set(updatedTransaction)
                                 .addOnSuccessListener {
@@ -122,15 +124,15 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
     fun deleteTransaction(transactionId: String) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            val transactionDocRef = db.collection("transactions")
+            val transactionDocRef = db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection("transaction")
+                .collection(Collections.TRANSACTIONS)
                 .document(transactionId)
 
             transactionDocRef.get().addOnSuccessListener { document ->
                 if (document.exists()) {
                     val transaction = document.toObject(Transaction::class.java)
-                    val userDocRef = db.collection("users").document(userId)
+                    val userDocRef = db.collection(Collections.USERS).document(userId)
 
                     userDocRef.get().addOnSuccessListener { userDocument ->
                         if (userDocument.exists()) {
@@ -140,15 +142,15 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                 when (transaction?.type) {
                                     EXPENSES -> {
                                         userDocRef.update(
-                                            "totalExpenditure",
+                                            Fields.TOTAL_EXPENDITURE,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             ),
-                                            "expensesForThePeriod",
+                                            Fields.EXPENSES_FOR_THE_PERIOD,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             ),
-                                            "expensesForDay",
+                                            Fields.EXPENSES_FOR_DAY,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             )
@@ -157,11 +159,11 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
 
                                     INCOME -> {
                                         userDocRef.update(
-                                            "totalIncome",
+                                            Fields.TOTAL_INCOME,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             ),
-                                            "incomeForThePeriod",
+                                            Fields.INCOME_FOR_THE_PERIOD,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             )
@@ -191,20 +193,20 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
     private fun updatePeriodData(transaction: Transaction?, amountChange: Float) {
         val userId = auth.currentUser?.uid
         if (userId != null && transaction != null) {
-            val periodDocRef = db.collection("periods")
-                .whereEqualTo("period", transaction.period)
+            val periodDocRef = db.collection(Collections.PERIODS)
+                .whereEqualTo(Fields.PERIOD, transaction.period)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     for (doc in querySnapshot.documents) {
                         val type = transaction.type
                         if (type == EXPENSES) {
                             doc.reference.update(
-                                "expensesForThePeriod",
+                                Fields.EXPENSES_FOR_THE_PERIOD,
                                 FieldValue.increment(amountChange.toDouble())
                             )
                         } else if (type == INCOME) {
                             doc.reference.update(
-                                "incomeForThePeriod",
+                                Fields.EXPENSES_FOR_THE_PERIOD,
                                 FieldValue.increment(amountChange.toDouble())
                             )
                         }

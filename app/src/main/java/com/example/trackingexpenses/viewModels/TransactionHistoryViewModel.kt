@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trackingexpenses.models.Period
 import com.example.trackingexpenses.models.Transaction
+import com.example.trackingexpenses.objects.Collections
+import com.example.trackingexpenses.objects.Fields
 import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ONLY_EXPENSES
 import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ONLY_INCOME
 import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
@@ -35,9 +37,9 @@ class TransactionHistoryViewModel : ViewModel() {
     fun fetchRecentTransactions() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("transactions")
+            db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection("transaction")
+                .collection(Collections.TRANSACTIONS)
                 .orderBy("dateTime", Query.Direction.DESCENDING)
                 .limit(5)
                 .addSnapshotListener { snapshot, e ->
@@ -56,10 +58,10 @@ class TransactionHistoryViewModel : ViewModel() {
     fun fetchAndFilterTransactions(type: String) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("transactions")
+            db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection("transaction")
-                .orderBy("dateTime", Query.Direction.DESCENDING)
+                .collection(Collections.TRANSACTIONS)
+                .orderBy(Fields.DATE_TIME, Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.w("Firestore", "Listen failed.", e)
@@ -84,9 +86,9 @@ class TransactionHistoryViewModel : ViewModel() {
     fun fetchPopularCategoriesOfExpenses() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("transactions")
+            db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection("transaction")
+                .collection(Collections.TRANSACTIONS)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.e("Firestore Error", "Listen failed.", e)
@@ -129,13 +131,13 @@ class TransactionHistoryViewModel : ViewModel() {
             Log.i("TestTest", "Fetching transactions for user: $userId")
             Log.i("TestTest", "Start date: $startDate, End date: $endDate")
 
-            db.collection("transactions")
+            db.collection(Collections.TRANSACTIONS)
                 .document(userId)
-                .collection("transaction")
-                .whereGreaterThan("dateTime", startDate)
-                .whereLessThan("dateTime", endDate)
-                .whereEqualTo("type", EXPENSES)
-                .orderBy("dateTime", Query.Direction.ASCENDING)
+                .collection(Collections.TRANSACTIONS)
+                .whereGreaterThan(Fields.DATE_TIME, startDate)
+                .whereLessThan(Fields.DATE_TIME, endDate)
+                .whereEqualTo(Fields.TYPE, EXPENSES)
+                .orderBy(Fields.DATE_TIME, Query.Direction.ASCENDING)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.w("Firestore", "Listen failed.", e)
@@ -175,7 +177,7 @@ class TransactionHistoryViewModel : ViewModel() {
     fun fetchPeriodsData() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            db.collection("periods")
+            db.collection(Collections.PERIODS)
                 .get()
                 .addOnSuccessListener { result ->
                     val expensesData = mutableListOf<Pair<Double, String>>()
