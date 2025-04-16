@@ -1,6 +1,5 @@
 package com.example.trackingexpenses.views.historyScreen
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -66,6 +65,7 @@ fun HistoryScreen(
         }
 
         if (groupedTransactions.isEmpty()) {
+            val a = "s".lowercase()
             item {
                 Box(
                     modifier = Modifier
@@ -85,7 +85,6 @@ fun HistoryScreen(
                             text = stringResource(id = R.string.no_transactions),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(top = 8.dp),
-                            color = MaterialTheme.colorScheme.tertiary
                         )
                     }
                 }

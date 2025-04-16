@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
@@ -24,6 +25,7 @@ import com.example.trackingexpenses.objects.TypeOfTransactions.EXPENSES
 import com.example.trackingexpenses.objects.TypeOfTransactions.INCOME
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.viewModels.UserViewModel
+import com.example.trackingexpenses.views.PrimaryButton
 import com.google.firebase.Timestamp
 import java.time.LocalDate
 import java.time.LocalTime
@@ -140,36 +142,21 @@ fun ActionsWithBalance(
     Row(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
     ) {
-        Button(
-            modifier = Modifier.fillMaxWidth(0.45f),
+
+        PrimaryButton(
+            buttonText = stringResource(R.string.add_income),
+            buttonSize = 0.45f,
             onClick = {
                 showDialogWithAddIncome.value = true
-            },
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-            shape = RoundedCornerShape(30.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.add_income),
-                color = MaterialTheme.colorScheme.tertiary,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.W700
-            )
-        }
+            }
+        )
 
-        Button(
-            modifier = Modifier.fillMaxWidth(0.9f),
+        PrimaryButton(
+            buttonText = stringResource(R.string.add_expenses),
+            buttonSize = 0.85f,
             onClick = {
                 showDialogWithAddExpenditure.value = true
-            },
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-            shape = RoundedCornerShape(30.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.add_expenses),
-                color = MaterialTheme.colorScheme.tertiary,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.W700
-            )
-        }
+            }
+        )
     }
 }

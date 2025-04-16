@@ -11,5 +11,5 @@ data class Transaction(
     val category: String = "",
     val type: String = "",
     val dateTime: Timestamp = Timestamp.now(),
-    val period: Int = 1
+    var period: Int = 1
 )

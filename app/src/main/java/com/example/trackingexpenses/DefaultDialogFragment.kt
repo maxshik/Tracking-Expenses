@@ -1,4 +1,4 @@
-package com.example.trackingexpenses.views.mainScreen
+package com.example.trackingexpenses
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.trackingexpenses.R
 
 @Composable
-fun ConfirmationDialogToIncreasePeriod(
+fun DefaultDialogFragment(
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    title: String?,
+    label: String?,
+    btnName: String
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -32,26 +34,28 @@ fun ConfirmationDialogToIncreasePeriod(
                 .padding(16.dp)
         ) {
             Column {
-                Text(
-                    text = stringResource(id = R.string.confirmation_dialog_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
+                if (!title.isNullOrEmpty()) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
 
-                Text(
-                    text = stringResource(id = R.string.confirmation_dialog_message),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                if (!label.isNullOrEmpty()) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
 
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text(stringResource(id = R.string.cancel_button), color = MaterialTheme.colorScheme.tertiary)
+                        Text(stringResource(id = R.string.cancel_button), style = MaterialTheme.typography.bodyMedium)
                     }
                     Button(
                         onClick = {
@@ -62,10 +66,11 @@ fun ConfirmationDialogToIncreasePeriod(
                         shape = RoundedCornerShape(30.dp),
                         modifier = Modifier.padding(start = 8.dp)
                     ) {
-                        Text(stringResource(id = R.string.start_button), color = MaterialTheme.colorScheme.tertiary)
+                        Text(btnName, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
         }
     }
+
 }

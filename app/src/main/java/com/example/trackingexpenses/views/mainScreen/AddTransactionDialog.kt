@@ -59,7 +59,6 @@ fun AddTransactionDialog(
                     modifier = Modifier.padding(5.dp),
                     text = stringResource(id = R.string.add_transaction_title),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -71,7 +70,7 @@ fun AddTransactionDialog(
                         }
                     },
                     label = {
-                        Text(enterMoney, color = MaterialTheme.colorScheme.tertiary)
+                        Text(enterMoney, style = MaterialTheme.typography.bodyMedium)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -106,7 +105,7 @@ fun AddTransactionDialog(
                         }
                     },
                     label = {
-                        Text(stringResource(id = R.string.notes_label), color = MaterialTheme.colorScheme.tertiary)
+                        Text(stringResource(id = R.string.notes_label), style = MaterialTheme.typography.labelSmall)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -123,7 +122,7 @@ fun AddTransactionDialog(
                 if (errorMessage.isNotEmpty()) {
                     Text(
                         text = errorMessage,
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
                 }
@@ -132,7 +131,7 @@ fun AddTransactionDialog(
                     horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text(stringResource(id = R.string.cancel_button), color = MaterialTheme.colorScheme.tertiary)
+                        Text(stringResource(id = R.string.cancel_button), color = MaterialTheme.colorScheme.tertiary, style = MaterialTheme.typography.labelSmall)
                     }
                     Button(
                         onClick = {
@@ -146,10 +145,10 @@ fun AddTransactionDialog(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-                        shape = RoundedCornerShape(30.dp),
+                        shape = RoundedCornerShape(15.dp),
                         modifier = Modifier.padding(start = 8.dp)
                     ) {
-                        Text(stringResource(id = R.string.add_button), color = MaterialTheme.colorScheme.tertiary)
+                        Text(stringResource(id = R.string.add_button), color = MaterialTheme.colorScheme.tertiary, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }

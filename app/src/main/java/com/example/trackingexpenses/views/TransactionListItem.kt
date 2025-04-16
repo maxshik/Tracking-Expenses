@@ -3,7 +3,6 @@ package com.example.trackingexpenses.views
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,10 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.trackingexpenses.DefaultDialogFragment
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.models.Transaction
+import com.example.trackingexpenses.ui.theme.MontserratFontFamily
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 
 @Composable
@@ -82,7 +87,7 @@ fun TransactionListItem(
     }
 
     Card(
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
@@ -95,8 +100,11 @@ fun TransactionListItem(
         }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+
         ) {
             Image(
                 painter = painterResource(id = checkTransactionForReturnImage(context, transaction.category)),
@@ -112,21 +120,42 @@ fun TransactionListItem(
                     .padding(end = 8.dp)
             ) {
                 Text(
-                    "${transaction.type}: ${transaction.coast} BYN",
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium, fontFamily = MontserratFontFamily)) {
+                            append("${transaction.type}: ")
+                        }
+                        append("${transaction.coast} BYN")
+                    },
                     color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(2.dp)
+                    modifier = Modifier.padding(2.dp),
+                    fontFamily = MontserratFontFamily,
+                    fontWeight = FontWeight.Light
                 )
                 Text(
                     modifier = Modifier.padding(2.dp),
-                    text = stringResource(id = R.string.date) + ": ${transaction.date} ${transaction.time}",
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.tertiary,
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Medium, fontFamily = MontserratFontFamily)) {
+                            append(stringResource(id = R.string.date) + ": ")
+                        }
+                        append("${transaction.date} ${transaction.time}")
+                    },
+                    fontFamily = MontserratFontFamily,
+                    fontWeight = FontWeight.Light
                 )
 
                 if (transaction.notes.isNotEmpty()) {
                     Text(
                         modifier = Modifier.padding(2.dp),
-                        text = stringResource(id = R.string.notes) + ": ${transaction.notes}",
-                        color = MaterialTheme.colorScheme.tertiary
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Medium, fontFamily = MontserratFontFamily)) {
+                                append(stringResource(id = R.string.notes) + ": ")
+                            }
+                            append(transaction.notes)
+                        },
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontFamily = MontserratFontFamily,
+                        fontWeight = FontWeight.Light
                     )
                 }
             }
@@ -144,54 +173,14 @@ fun TransactionListItem(
     }
 
     if (showDeleteDialog) {
-        DeleteTransactionDialog(
+        DefaultDialogFragment(
             onDismiss = { showDeleteDialog = false },
             onConfirm = {
                 transactionManagementViewModel.deleteTransaction(transaction.id)
-            }
+            },
+            stringResource(id = R.string.confirmation_dialog_for_delete),
+            null,
+            stringResource(id = R.string.delete)
         )
-    }
-}
-
-@Composable
-fun DeleteTransactionDialog(
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
-) {
-    Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.confirmation_dialog_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text(stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.tertiary)
-                    }
-                    Button(
-                        onClick = {
-                            onConfirm()
-                            onDismiss()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-                        shape = RoundedCornerShape(30.dp),
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Text(stringResource(id = R.string.delete), color = MaterialTheme.colorScheme.tertiary)
-                    }
-                }
-            }
-        }
     }
 }

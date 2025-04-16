@@ -35,7 +35,7 @@ fun SelectSortTypeMenu(transactionHistoryViewModel: TransactionHistoryViewModel,
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 },
-            label = { Text(stringResource(R.string.choice_category), color = MaterialTheme.colorScheme.tertiary) },
+            label = { Text(stringResource(R.string.choice_category), style = MaterialTheme.typography.labelSmall) },
             trailingIcon = {
                 Icon(icon, contentDescription = null, modifier = Modifier.clickable { expanded = !expanded })
             }
@@ -50,7 +50,7 @@ fun SelectSortTypeMenu(transactionHistoryViewModel: TransactionHistoryViewModel,
                 DropdownMenuItem(onClick = {
                     transactionHistoryViewModel.currentSortType.value = suggestion
                     expanded = false
-                }, text = { Text(text = suggestion) })
+                }, text = { Text(text = suggestion, style = MaterialTheme.typography.bodyMedium) })
             }
         }
     }

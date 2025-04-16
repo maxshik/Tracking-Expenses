@@ -13,3 +13,13 @@ val Beige = Color(0xFFCCC1C1)
 val LightBrown = Color(0xFFC27F54)
 val DarkGray = Color(0xFF404040)
 val White = Color(0xFFDCD8D8)
+
+val MainDark = Color(0xFF1D2D44)
+val MainMedium = Color(0xFF3E5C76)
+val MainLight = Color(0xFF1D2D44)
+val MainWhite = Color(0xFFF0EBD8)
+val MainBlack = Color(0xFF0D1321)
+val Green = Color(0xFF99FF85)
+val Yellow = Color(0xFFFCF197)
+val Error = Color(0xFFD25C47)
+

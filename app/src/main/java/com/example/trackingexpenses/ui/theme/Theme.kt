@@ -12,10 +12,12 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = SlateGray, // AppBarColor
-    secondary = BrownDark, // Buttons
-    tertiary = GreyLight, // Text
+    secondary = MainMedium, // Buttons
+    tertiary = MainWhite, // Text
     background = Black,
-    primaryContainer = DarkBrown
+    primaryContainer = DarkBrown,
+    error = Error,
+    outlineVariant = Yellow,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,8 +25,11 @@ private val LightColorScheme = lightColorScheme(
     secondary = LightBrown,
     tertiary = DarkGray,
     background = White,
-    primaryContainer = Beige
+    primaryContainer = Beige,
+    error = Error
 )
+
+val textColor = { isDarkTheme: Boolean -> if (isDarkTheme) DarkColorScheme.tertiary else LightColorScheme.tertiary }
 
 @Composable
 fun TrackingExpensesTheme(
@@ -43,7 +48,7 @@ fun TrackingExpensesTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = createTypography(isDarkTheme = darkTheme),
         content = content
     )
 }

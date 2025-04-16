@@ -43,9 +43,9 @@ fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context
         .axisLineColor(MaterialTheme.colorScheme.tertiary)
         .shouldDrawAxisLineTillEnd(true)
         .steps(barData.size - 1)
-        .bottomPadding(120.dp)
-        .axisLabelAngle(60f)
-        .startDrawPadding(40.dp)
+        .bottomPadding(200.dp)
+        .axisLabelAngle(55f)
+        .startDrawPadding(50.dp)
         .labelData { index -> barData[index].label }
         .build()
 
@@ -54,7 +54,7 @@ fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context
         .backgroundColor(MaterialTheme.colorScheme.background)
         .axisLabelColor(MaterialTheme.colorScheme.tertiary)
         .axisLineColor(MaterialTheme.colorScheme.tertiary)
-        .labelAndAxisLinePadding(20.dp)
+        .labelAndAxisLinePadding(0.dp)
         .axisOffset(20.dp)
         .labelData { index -> (index * (maxRange / yStepSize)).toString() }
         .build()
@@ -72,9 +72,7 @@ fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context
             selectionHighlightData = SelectionHighlightData(
                 popUpLabel = { x, y ->
                     "${context.getString(R.string.category)}: ${y}. ${
-                        context.getString(
-                            R.string.category
-                        )
+                        context.getString(R.string.category)
                     }: ${barData[x.toInt()].label}"
                 }
             )
@@ -85,7 +83,7 @@ fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context
 
     BarChart(
         modifier = Modifier
-            .height(350.dp)
+            .height(500.dp)
             .background(MaterialTheme.colorScheme.background),
         barChartData = barChartData
     )

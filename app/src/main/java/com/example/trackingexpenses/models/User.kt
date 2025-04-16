@@ -1,5 +1,7 @@
 package com.example.trackingexpenses.models
 
+import com.example.trackingexpenses.objects.TypesOfAccount.USER
+
 data class User(
     val firstLogin: Boolean = false,
     val lastEnterInApp: String? = null,
@@ -9,5 +11,7 @@ data class User(
     val incomeForThePeriod: Float = 0f,
     val expensesForDay: Float = 0f,
     val dayLimit: Float? = null,
-    val currentPeriod: Int = 1
+    val currentPeriod: Int = 1,
+    val profileType: String = USER,
+    val familyId: String? = null
 )

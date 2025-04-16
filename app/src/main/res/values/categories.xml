@@ -3,52 +3,52 @@
     <string-array name="expenditure_categories">
         <item>Алкоголь</item>
         <item>Библиотека</item>
-        <item>Входные билеты</item>
+        <item>Билеты</item>
         <item>Гаджеты</item>
-        <item>Досуг с семьей</item>
+        <item>Семья</item>
         <item>Книги</item>
         <item>Косметика</item>
         <item>Кулинария</item>
-        <item>Курсы и обучение</item>
+        <item>Обучение</item>
         <item>Мебель</item>
-        <item>Медицинские услуги</item>
-        <item>Обслуживание автомобиля</item>
+        <item>Медицина</item>
+        <item>Автомобиль</item>
         <item>Одежда</item>
-        <item>Парикмахерская</item>
+        <item>Барбершоп</item>
         <item>Продукты</item>
         <item>Развлечения</item>
         <item>Спорт</item>
         <item>Спортзал</item>
         <item>Такси</item>
         <item>Техника</item>
-        <item>Услуги связи</item>
-        <item>Экстренные расходы</item>
+        <item>Связь</item>
+        <item>Важные</item>
         <item>Штрафы</item>
         <item>Хобби</item>
-        <item>Коммунальные услуги</item>
+        <item>Коммуналка</item>
         <item>Подарки</item>
         <item>Путешествия</item>
         <item>Страховка</item>
     </string-array>
 
     <string-array name="income_categories">
-        <item>Аренда недвижимости</item>
+        <item>Аренда</item>
         <item>Бонусы</item>
         <item>Дивиденды</item>
         <item>Зарплата</item>
         <item>Инвестиции</item>
         <item>Краудфандинг</item>
         <item>Наследство</item>
-        <item>Партнерская программа</item>
+        <item>Партнеры</item>
         <item>Пенсия</item>
         <item>Подарок</item>
         <item>Подработка</item>
-        <item>Продажа активов</item>
+        <item>Активы</item>
         <item>Продажа услуг</item>
         <item>Стипендия</item>
-        <item>Торговля на бирже</item>
+        <item>Биржа</item>
         <item>Фриланс</item>
-        <item>Проценты по вкладам</item>
+        <item>Вклады</item>
         <item>Выигрыш</item>
     </string-array>
 

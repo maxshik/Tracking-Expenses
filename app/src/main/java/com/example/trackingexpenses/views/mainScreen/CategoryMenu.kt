@@ -10,7 +10,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -66,9 +68,18 @@ fun CategoryMenu(type: String, categoriesViewModel: CategoriesViewModel, transac
             Icon(
                 icon,
                 contentDescription = null,
-                modifier = Modifier.clickable { expanded = !expanded }
+                modifier = Modifier.clickable { expanded = !expanded },
+                tint = MaterialTheme.colorScheme.tertiary
             )
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedTextColor = MaterialTheme.colorScheme.tertiary,
+            focusedTextColor = MaterialTheme.colorScheme.tertiary,
+            focusedLabelColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.tertiary
+        ),
         interactionSource = interactionSource
     )
 
@@ -82,7 +93,7 @@ fun CategoryMenu(type: String, categoriesViewModel: CategoriesViewModel, transac
                 transactionManagementViewModel.category.value = suggestion
                 expanded = false
             },
-                text = { Text(suggestion) }
+                text = { Text(suggestion, style = MaterialTheme.typography.bodyMedium)  }
             )
         }
     }

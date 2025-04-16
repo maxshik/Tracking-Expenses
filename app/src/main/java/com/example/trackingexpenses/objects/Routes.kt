@@ -7,4 +7,5 @@ object Routes {
     const val HISTORY = "history"
     const val GRAPHICS = "graphics"
     const val PROFILE = "profile"
+    const val FAMILY = "family"
 }

@@ -29,6 +29,9 @@ class UserViewModel : ViewModel() {
     private var _userIncomeForPeriod = MutableStateFlow(0f)
     val userIncomeForPeriod: StateFlow<Float> get() = _userIncomeForPeriod
 
+    private var _usersFamilyId = MutableStateFlow<String?>(null)
+    val usersFamilyId: StateFlow<String?> get() = _usersFamilyId
+
     private var _userExpensesForPeriod = MutableStateFlow(0f)
     val userExpensesForPeriod: StateFlow<Float> get() = _userExpensesForPeriod
 
@@ -159,6 +162,7 @@ class UserViewModel : ViewModel() {
                 _userExpensesForDay.value = user?.expensesForDay ?: 0f
                 _dayLimit.value = user?.dayLimit ?: 0f
                 userCurrentPeriod.intValue = user?.currentPeriod ?: 1
+                _usersFamilyId.value = user?.familyId
 
                 _userPhotoUrl.value = auth.currentUser?.photoUrl
                 _userDisplayName.value = auth.currentUser?.displayName

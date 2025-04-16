@@ -1,4 +1,4 @@
-package com.example.trackingexpenses.views.profileScreen
+package com.example.trackingexpenses.views.familyScreen
 
 import android.content.Context
 import android.widget.Toast
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,19 +25,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.trackingexpenses.R
 
 @Composable
-fun SetDayLimitDialog(
+fun FamilyMemberSettingsDialog(
     onDismiss: () -> Unit,
-    onConfirm: (Float) -> Unit,
+    onConfirm: (String) -> Unit,
     context: Context,
-    dayLimit: Float
 ) {
-    val sum = remember { mutableStateOf("") }
+    val hash = remember { mutableStateOf("") }
     val showError = remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -49,45 +46,39 @@ fun SetDayLimitDialog(
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.set_day_limit_dialog_title),
+                    text = stringResource(id = R.string.send_query_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
                 Text(
-                    text = stringResource(id = R.string.set_day_limit_dialog_message),
+                    text = stringResource(id = R.string.information_about_query),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Text(
-                    text = stringResource(id = R.string.current_day_limit, dayLimit),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
                 TextField(
-                    value = sum.value,
+                    value = hash.value,
                     onValueChange = {
-                        if (it.all { char -> char.isDigit() || char == '.' }) {
-                            sum.value = it
-                        }
+                        hash.value = it
                     },
-                    label = { Text(stringResource(R.string.enter_money)) },
+                    label = { Text(stringResource(R.string.enter_family_code)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 10.dp)
-                        .border(0.5.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(5.dp)),
+                        .border(
+                            0.5.dp,
+                            MaterialTheme.colorScheme.tertiary,
+                            RoundedCornerShape(5.dp)
+                        ),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
                 )
 
                 Row(
@@ -95,15 +86,17 @@ fun SetDayLimitDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text(stringResource(id = R.string.cancel_button), color = MaterialTheme.colorScheme.tertiary)
+                        Text(
+                            stringResource(id = R.string.cancel_button),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                     Button(
                         onClick = {
-                            if (sum.value.isEmpty()) {
+                            if (hash.value.isEmpty()) {
                                 showError.value = true
                             } else {
-                                val limit = sum.value.toFloatOrNull() ?: 0f
-                                onConfirm(limit)
+                                onConfirm(hash.value)
                                 onDismiss()
                             }
                         },
@@ -111,7 +104,10 @@ fun SetDayLimitDialog(
                         shape = RoundedCornerShape(30.dp),
                         modifier = Modifier.padding(start = 8.dp)
                     ) {
-                        Text(stringResource(id = R.string.add), color = MaterialTheme.colorScheme.tertiary)
+                        Text(
+                            stringResource(id = R.string.send),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                 }
             }
@@ -120,7 +116,11 @@ fun SetDayLimitDialog(
 
     if (showError.value) {
         LaunchedEffect(Unit) {
-            Toast.makeText(context, context.getString(R.string.please_enter_sum), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.empty_family_code),
+                Toast.LENGTH_SHORT
+            ).show()
             showError.value = false
         }
     }

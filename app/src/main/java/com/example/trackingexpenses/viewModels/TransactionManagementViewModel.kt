@@ -3,6 +3,7 @@ package com.example.trackingexpenses.viewModels
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import co.yml.charts.common.extensions.isNotNull
 import com.example.trackingexpenses.mainScreen.viewModels.CategoriesViewModel
 import com.example.trackingexpenses.models.Transaction
 import com.example.trackingexpenses.models.User
@@ -17,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TransactionManagementViewModel(private val categoriesViewModel: CategoriesViewModel) :
+class TransactionManagementViewModel(private val categoriesViewModel: CategoriesViewModel, private val familyViewModel: FamilyViewModel) :
     ViewModel() {
     var coast = mutableStateOf("")
     var notes = mutableStateOf("")
@@ -108,6 +109,9 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                 .document(document.id)
                                 .set(updatedTransaction)
                                 .addOnSuccessListener {
+                                    user?.familyId?.let { familyId ->
+                                        familyViewModel.updateFamilyProfile(familyId, updatedTransaction, type)
+                                    }
                                     onComplete(document.id)
                                 }
                                 .addOnFailureListener { e ->
@@ -153,7 +157,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             ),
-                                            "expensesForDay",
+                                            Fields.EXPENSES_FOR_DAY,
                                             FieldValue.increment(
                                                 -transaction.coast.toFloat().toDouble()
                                             )
@@ -177,10 +181,11 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
 
                             checkLimit(user?.expensesForDay ?: 0f, user?.dayLimit ?: 0f)
 
-                            Log.i("huy", user?.expensesForDay.toString())
-                            Log.i("huy", user?.dayLimit.toString() + "limitday")
-
                             updatePeriodData(transaction, -transaction?.coast!!.toFloat())
+
+                            if (user?.familyId.isNotNull()) {
+                                familyViewModel.deleteFamilyTransaction(user?.familyId.toString(), transactionId)
+                            }
 
                             transactionDocRef.delete().addOnSuccessListener {
                                 Log.d("Firestore", "Transaction successfully deleted!")

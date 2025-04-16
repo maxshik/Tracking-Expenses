@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,7 +23,9 @@ import com.example.trackingexpenses.viewModels.UserViewModel
 import com.example.trackingexpenses.views.BottomNavigationBar
 import com.example.trackingexpenses.views.UpperMenu
 import com.example.trackingexpenses.ui.theme.TrackingExpensesTheme
+import com.example.trackingexpenses.viewModels.FamilyViewModel
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
+import com.example.trackingexpenses.views.familyScreen.FamilyScreen
 import com.example.trackingexpenses.views.graphicsScreen.GraphicScreen
 import com.example.trackingexpenses.views.historyScreen.HistoryScreen
 import com.example.trackingexpenses.views.mainScreen.MainScreen
@@ -35,6 +38,7 @@ class MainActivity : ComponentActivity() {
     private val userViewModel: UserViewModel by viewModels()
     private val transactionHistoryViewModel: TransactionHistoryViewModel by viewModels()
     private val categoriesViewModel: CategoriesViewModel by viewModels()
+    private val familyViewModel: FamilyViewModel by viewModels()
 
     private lateinit var transactionManagementViewModel: TransactionManagementViewModel
 
@@ -44,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
         transactionManagementViewModel = ViewModelProvider(
             this,
-            TransactionManagementViewModelFactory(categoriesViewModel)
+            TransactionManagementViewModelFactory(categoriesViewModel, familyViewModel)
         ).get(TransactionManagementViewModel::class.java)
 
         transactionHistoryViewModel.fetchRecentTransactions()
@@ -54,7 +58,10 @@ class MainActivity : ComponentActivity() {
         val currentDate =
             LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru", "RU")))
 
+
         setContent {
+            val scrollState = rememberScrollState()
+
             TrackingExpensesTheme {
                 val navController = rememberNavController()
                 val context = LocalContext.current
@@ -69,7 +76,8 @@ class MainActivity : ComponentActivity() {
                                     categoriesViewModel,
                                     transactionHistoryViewModel,
                                     modifier = Modifier.padding(innerPadding),
-                                    navController
+                                    navController,
+                                    scrollState
                                 )
                             },
                             bottomBar = {
@@ -119,12 +127,24 @@ class MainActivity : ComponentActivity() {
                             ProfileScreen(
                                 Modifier.padding(innerPadding),
                                 userViewModel,
-                                LocalContext.current
+                                LocalContext.current,
+                                navController,
+                                scrollState
                             )
                         }, bottomBar = {
                             BottomNavigationBar(navController, Routes.PROFILE, context)
                         }, topBar = {
                             UpperMenu(getString(R.string.profile))
+                        })
+                    }
+
+                    composable(Routes.FAMILY) {
+                        Scaffold(content = { innerPadding ->
+                            FamilyScreen(Modifier.padding(innerPadding), familyViewModel, context)
+                        }, bottomBar = {
+                            BottomNavigationBar(navController, Routes.FAMILY, context)
+                        }, topBar = {
+                            UpperMenu(getString(R.string.family))
                         })
                     }
                 }

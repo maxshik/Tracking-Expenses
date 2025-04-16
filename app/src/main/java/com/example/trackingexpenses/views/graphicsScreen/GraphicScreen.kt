@@ -1,6 +1,9 @@
 package com.example.trackingexpenses.views.graphicsScreen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,65 +26,55 @@ fun GraphicScreen(
     transactionHistoryViewModel: TransactionHistoryViewModel,
 ) {
     val transactions by transactionHistoryViewModel.allTransactions.observeAsState(emptyList())
-    val popularCategories by transactionHistoryViewModel.popularCategoriesLiveData.observeAsState(
-        emptyList()
-    )
-    val transactionsLast30Days by transactionHistoryViewModel.transactionsLast30Days.observeAsState(
-        emptyList()
-    )
-    val incomeDataForPeriods by transactionHistoryViewModel.incomeDataForPeriods.observeAsState(
-        emptyList()
-    )
-    val expensesDataForPeriods by transactionHistoryViewModel.expensesDataForPeriods.observeAsState(
-        emptyList()
-    )
+    val popularCategories by transactionHistoryViewModel.popularCategoriesLiveData.observeAsState(emptyList())
+    val transactionsLast30Days by transactionHistoryViewModel.transactionsLast30Days.observeAsState(emptyList())
+    val incomeDataForPeriods by transactionHistoryViewModel.incomeDataForPeriods.observeAsState(emptyList())
+    val expensesDataForPeriods by transactionHistoryViewModel.expensesDataForPeriods.observeAsState(emptyList())
 
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
-        transactionHistoryViewModel.currentSortType.value =
-            POPULAR_EXPENSES_BAR_CHART
-
+        transactionHistoryViewModel.currentSortType.value = POPULAR_EXPENSES_BAR_CHART
         transactionHistoryViewModel.fetchPopularCategoriesOfExpenses()
         transactionHistoryViewModel.fetchTransactionsLast30Days()
         transactionHistoryViewModel.fetchPeriodsData()
     }
 
-    LazyColumn(modifier) {
-        item {
-            SelectSortTypeMenu(transactionHistoryViewModel, categories)
-        }
-        item {
-            when (transactionHistoryViewModel.currentSortType.value) {
-                POPULAR_EXPENSES_BAR_CHART -> {
-                    BarchartBars(popularCategories, context)
-                }
+    Column(
+        modifier = modifier.verticalScroll(scrollState)
+    ) {
+        SelectSortTypeMenu(transactionHistoryViewModel, categories)
 
-                ChartTypes.POPULAR_EXPENSES_DONUT_CHART -> {
-                    transactionHistoryViewModel.fetchAndFilterTransactions(ONLY_EXPENSES)
-                    CategoryDonutChart(context, transactions)
-                }
+        when (transactionHistoryViewModel.currentSortType.value) {
+            POPULAR_EXPENSES_BAR_CHART -> {
+                BarchartBars(popularCategories, context)
+            }
 
-                ChartTypes.INCOME_SOURCES_DONUT_CHART -> {
-                    transactionHistoryViewModel.fetchAndFilterTransactions(ONLY_INCOME)
-                    CategoryDonutChart(context, transactions)
-                }
+            ChartTypes.POPULAR_EXPENSES_DONUT_CHART -> {
+                transactionHistoryViewModel.fetchAndFilterTransactions(ONLY_EXPENSES)
+                CategoryDonutChart(context, transactions)
+            }
 
-                ChartTypes.EXPENSES_PERIODS_LINE_CHART -> {
-                    SingleLineChartWithGridLinesForPeriods(expensesDataForPeriods)
-                }
+            ChartTypes.INCOME_SOURCES_DONUT_CHART -> {
+                transactionHistoryViewModel.fetchAndFilterTransactions(ONLY_INCOME)
+                CategoryDonutChart(context, transactions)
+            }
 
-                ChartTypes.INCOME_PERIODS_LINE_CHART -> {
-                    SingleLineChartWithGridLinesForPeriods(incomeDataForPeriods)
-                }
+            ChartTypes.EXPENSES_PERIODS_LINE_CHART -> {
+                SingleLineChartWithGridLinesForPeriods(expensesDataForPeriods)
+            }
 
-                ChartTypes.LAST_30_DAYS_EXPENSES_LINE_CHART -> {
-                    SingleLineChartWithGridLines(transactionsLast30Days, context)
-                }
+            ChartTypes.INCOME_PERIODS_LINE_CHART -> {
+                SingleLineChartWithGridLinesForPeriods(incomeDataForPeriods)
+            }
 
-                else -> {
-                    BarchartBars(popularCategories, context)
-                }
+            ChartTypes.LAST_30_DAYS_EXPENSES_LINE_CHART -> {
+                SingleLineChartWithGridLines(transactionsLast30Days, context)
+            }
+
+            else -> {
+                BarchartBars(popularCategories, context)
             }
         }
     }

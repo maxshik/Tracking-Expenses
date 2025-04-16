@@ -54,16 +54,16 @@ fun InformationAboutSpendingForAllTime(userViewModel: UserViewModel) {
         ) {
             Row() {
                 ProgressBar(
-                    progress = spendInPercent, color = Color(0xFF4169E1)
+                    progress = spendInPercent, color = MaterialTheme.colorScheme.outlineVariant
                 )
                 ProgressBar(
-                    progress = 1f, color = Color(0xFF7FFF00)
+                    progress = 1f, color = MaterialTheme.colorScheme.secondary
                 )
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box() {
-                    ProgressBar(.055f, Color(0xFF4169E1))
+                    ProgressBar(.055f, MaterialTheme.colorScheme.outlineVariant)
                 }
 
                 Text(
@@ -77,7 +77,7 @@ fun InformationAboutSpendingForAllTime(userViewModel: UserViewModel) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box() {
-                    ProgressBar(.055f, Color(0xFF7FFF00))
+                    ProgressBar(.055f, MaterialTheme.colorScheme.secondary)
                 }
 
                 Text(

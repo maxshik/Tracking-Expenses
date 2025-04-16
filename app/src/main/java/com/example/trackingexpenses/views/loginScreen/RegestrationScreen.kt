@@ -1,4 +1,4 @@
-package com.example.trackingexpenses.views.logInToTheApp
+package com.example.trackingexpenses.views.loginScreen
 
 import android.app.Activity
 import android.content.Context
@@ -58,7 +58,12 @@ fun RegistrationScreen(
         TextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text(stringResource(id = R.string.registration_username_label), color = MaterialTheme.colorScheme.tertiary) },
+            label = {
+                Text(
+                    stringResource(id = R.string.registration_username_label),
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -67,7 +72,12 @@ fun RegistrationScreen(
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(stringResource(id = R.string.registration_password_label), color = MaterialTheme.colorScheme.tertiary) },
+            label = {
+                Text(
+                    stringResource(id = R.string.registration_password_label),
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
@@ -98,7 +108,10 @@ fun RegistrationScreen(
         TextButton(onClick = {
             (context as? Activity)?.finish()
         }) {
-            Text(stringResource(id = R.string.registration_return_to_main), color = MaterialTheme.colorScheme.secondary)
+            Text(
+                stringResource(id = R.string.registration_return_to_main),
+                color = MaterialTheme.colorScheme.secondary
+            )
         }
     }
 }

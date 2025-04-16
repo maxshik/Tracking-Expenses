@@ -64,7 +64,7 @@ fun CategoryDonutChart(context: Context, transactions: List<Transaction>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(500.dp)
+            .height(800.dp)
     ) {
         Legends(legendsConfig = DataUtils.getLegendsConfigFromPieChartData(pieChartData, 3))
         DonutPieChart(

@@ -1,8 +1,10 @@
 package com.example.trackingexpenses.views.mainScreen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,21 +22,26 @@ fun MainScreen(
     categoriesViewModel: CategoriesViewModel,
     transactionHistoryViewModel: TransactionHistoryViewModel,
     modifier: Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    scrollState: ScrollState,
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        item {
-            GeneralInformation(userViewModel, transactionManagementViewModel)
-        }
-        item {
-            ActionsWithBalance(transactionManagementViewModel, userViewModel, categoriesViewModel, LocalContext.current)
-        }
-        item {
-            RecentTransactions(transactionManagementViewModel, transactionHistoryViewModel, navController) // Передайте navController
-        }
+        GeneralInformation(userViewModel, transactionManagementViewModel)
+        ActionsWithBalance(
+            transactionManagementViewModel,
+            userViewModel,
+            categoriesViewModel,
+            LocalContext.current
+        )
+        RecentTransactions(
+            transactionManagementViewModel,
+            transactionHistoryViewModel,
+            navController
+        )
     }
 }

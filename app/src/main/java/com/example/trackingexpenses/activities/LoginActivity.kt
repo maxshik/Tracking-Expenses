@@ -17,13 +17,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import co.yml.charts.common.extensions.isNotNull
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.views.logInToTheApp.LoginScreen
+import com.example.trackingexpenses.views.loginScreen.LoginScreen
 import com.example.trackingexpenses.models.User
-import com.example.trackingexpenses.objects.Routes
+import com.example.trackingexpenses.objects.Collections
+import com.example.trackingexpenses.objects.Fields
 import com.example.trackingexpenses.objects.Routes.LOGIN
 import com.example.trackingexpenses.objects.Routes.REGISTRATION
+import com.example.trackingexpenses.objects.TypesOfAccount.USER
 import com.example.trackingexpenses.ui.theme.TrackingExpensesTheme
-import com.example.trackingexpenses.views.logInToTheApp.RegistrationScreen
+import com.example.trackingexpenses.views.loginScreen.RegistrationScreen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -128,7 +130,7 @@ class LoginActivity : ComponentActivity() {
 
     private fun checkUserAndProceed(userId: String) {
         val db = Firebase.firestore
-        val userDoc = db.collection("users").document(userId)
+        val userDoc = db.collection(Collections.USERS).document(userId)
 
         userDoc.get().addOnSuccessListener { document ->
             if (!document.exists()) {
@@ -139,7 +141,9 @@ class LoginActivity : ComponentActivity() {
                     expensesForThePeriod = 0f,
                     incomeForThePeriod = 0f,
                     dayLimit = null,
-                    expensesForDay = 0f
+                    expensesForDay = 0f,
+                    profileType = USER,
+                    familyId = null
                 )
 
                 userDoc.set(newUser).addOnSuccessListener {
@@ -165,15 +169,15 @@ class LoginActivity : ComponentActivity() {
     private fun addDefaultCategoriesForExpenditure(userId: String) {
         val expenditureCategories = resources.getStringArray(R.array.expenditure_categories).toList()
 
-        Firebase.firestore.collection("categoriesOfExpenditure").document(userId)
-            .set(mapOf("categoriesOfExpenditure" to expenditureCategories))
+        Firebase.firestore.collection(Collections.CATEGORIES_IF_EXPENDITURE).document(userId)
+            .set(mapOf(Fields.CATEGORIES_OF_EXPENDITURE to expenditureCategories))
     }
 
     private fun addDefaultCategoriesForIncome(userId: String) {
         val incomeCategories = resources.getStringArray(R.array.income_categories).toList()
 
-        Firebase.firestore.collection("categoriesOfIncome").document(userId)
-            .set(mapOf("categoriesOfIncome" to incomeCategories))
+        Firebase.firestore.collection(Collections.CATEGORIES_OF_INCOME).document(userId)
+            .set(mapOf(Fields.CATEGORIES_OF_INCOME to incomeCategories))
     }
     private fun resetPassword(email: String, context: Context, auth: FirebaseAuth) {
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->

@@ -46,7 +46,7 @@ fun RecentTransactions(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp, top = 16.dp, end = 5.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colorScheme.primaryContainer),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -62,8 +62,6 @@ fun RecentTransactions(
             Text(
                 text = stringResource(R.string.recent_transactions),
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.tertiary,
-                fontWeight = FontWeight.Bold
             )
 
             Icon(

@@ -1,4 +1,4 @@
-package com.example.trackingexpenses.views.logInToTheApp
+package com.example.trackingexpenses.views.loginScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -51,14 +52,15 @@ fun BottomNavigationBar(navController: NavHostController, currentRoute: String, 
                         restoreState = true
                     }
                 },
-                label = { Text(text = item.title) },
+                label = { Text(text = item.title, style = MaterialTheme.typography.bodyMedium) },
                 alwaysShowLabel = true,
                 icon = {
                     BadgedBox(badge = { }) {
                         Icon(
                             modifier = Modifier.size(24.dp),
                             painter = painterResource(id = item.icon),
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                     }
                 }

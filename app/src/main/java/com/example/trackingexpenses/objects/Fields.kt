@@ -15,4 +15,12 @@ object Fields {
     const val CURRENT_PERIOD = "currentPeriod"
     const val DAY_LIMIT = "dayLimit"
     const val TRANSACTION = "transaction"
+    const val PROFILE_TYPE = "profileType"
+    const val MEMBERS = "members"
+    const val FAMILY_ID = "familyId"
+    const val USER_ID = "userId"
+    const val STATUS = "status"
+    const val NAME = "name"
+    const val EMAIL = "email"
+    const val IMG = "img"
 }

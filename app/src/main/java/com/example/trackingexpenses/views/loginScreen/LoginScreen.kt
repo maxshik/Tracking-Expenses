@@ -1,6 +1,5 @@
-package com.example.trackingexpenses.views.logInToTheApp
+package com.example.trackingexpenses.views.loginScreen
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
