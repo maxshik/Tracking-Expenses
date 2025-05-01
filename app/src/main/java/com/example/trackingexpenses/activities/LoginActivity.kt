@@ -79,15 +79,13 @@ class LoginActivity : ComponentActivity() {
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
+                Log.e("!!!", task.exception.toString())
                 if (task.isSuccessful) {
                     Toast.makeText(
                         baseContext,
                         getString(R.string.registration_success),
                         Toast.LENGTH_SHORT,
                     ).show()
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        finish()
-                    }, 2000)
                 } else {
                     Toast.makeText(
                         baseContext,
@@ -179,6 +177,7 @@ class LoginActivity : ComponentActivity() {
         Firebase.firestore.collection(Collections.CATEGORIES_OF_INCOME).document(userId)
             .set(mapOf(Fields.CATEGORIES_OF_INCOME to incomeCategories))
     }
+
     private fun resetPassword(email: String, context: Context, auth: FirebaseAuth) {
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
             if (task.isSuccessful) {

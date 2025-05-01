@@ -108,4 +108,10 @@
     <string name="enter_family_code">Введите код семьи</string>
     <string name="empty_family_code">Заполните поле с кодом!</string>
     <string name="current_day_limit">Текущий дневной лимит: %1$.2f</string>
+    <string name="edit">Edit</string>
+    <string name="edit_transaction">Edit Transaction</string>
+    <string name="amount">Amount</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="save">Save</string>
 </resources>

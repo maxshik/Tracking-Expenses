@@ -18,8 +18,10 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TransactionManagementViewModel(private val categoriesViewModel: CategoriesViewModel, private val familyViewModel: FamilyViewModel) :
-    ViewModel() {
+class TransactionManagementViewModel(
+    private val categoriesViewModel: CategoriesViewModel,
+    private val familyViewModel: FamilyViewModel
+) : ViewModel() {
     var coast = mutableStateOf("")
     var notes = mutableStateOf("")
     val date = mutableStateOf("")
@@ -34,8 +36,7 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
     fun checkLimit(newExpensesForDay: Float, dayLimit: Float?) {
         if (newExpensesForDay > (dayLimit?.toFloat() ?: Float.MAX_VALUE)) {
             isLimitExceeded.value = true
-        }
-        else {
+        } else {
             isLimitExceeded.value = false
         }
     }
@@ -146,34 +147,23 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                             val user = userDocument.toObject(User::class.java)
 
                             if (transaction?.period == user?.currentPeriod) {
-                                when (transaction?.type) {
+                                when (transaction!!.type) {
                                     EXPENSES -> {
                                         userDocRef.update(
                                             Fields.TOTAL_EXPENDITURE,
-                                            FieldValue.increment(
-                                                -transaction.coast.toFloat().toDouble()
-                                            ),
+                                            FieldValue.increment(-transaction!!.coast.toDouble()),
                                             Fields.EXPENSES_FOR_THE_PERIOD,
-                                            FieldValue.increment(
-                                                -transaction.coast.toFloat().toDouble()
-                                            ),
+                                            FieldValue.increment(-transaction!!.coast.toDouble()),
                                             Fields.EXPENSES_FOR_DAY,
-                                            FieldValue.increment(
-                                                -transaction.coast.toFloat().toDouble()
-                                            )
+                                            FieldValue.increment(-transaction.coast.toDouble())
                                         )
                                     }
-
                                     INCOME -> {
                                         userDocRef.update(
                                             Fields.TOTAL_INCOME,
-                                            FieldValue.increment(
-                                                -transaction.coast.toFloat().toDouble()
-                                            ),
+                                            FieldValue.increment(-transaction!!.coast.toDouble()),
                                             Fields.INCOME_FOR_THE_PERIOD,
-                                            FieldValue.increment(
-                                                -transaction.coast.toFloat().toDouble()
-                                            )
+                                            FieldValue.increment(-transaction.coast.toDouble())
                                         )
                                     }
                                 }
@@ -181,10 +171,10 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
 
                             checkLimit(user?.expensesForDay ?: 0f, user?.dayLimit ?: 0f)
 
-                            updatePeriodData(transaction, -transaction?.coast!!.toFloat())
+                            updatePeriodData(transaction, -transaction!!.coast.toFloat())
 
                             if (user?.familyId.isNotNull()) {
-                                familyViewModel.deleteFamilyTransaction(user?.familyId.toString(), transactionId)
+                                familyViewModel.deleteFamilyTransaction(user!!.familyId.toString(), transactionId)
                             }
 
                             transactionDocRef.delete().addOnSuccessListener {
@@ -192,6 +182,105 @@ class TransactionManagementViewModel(private val categoriesViewModel: Categories
                             }.addOnFailureListener { e ->
                                 Log.w("Firestore", "Error deleting transaction", e)
                             }
+                        }
+                    }.addOnFailureListener { e ->
+                        Log.w("Firestore", "Error getting user document", e)
+                    }
+                }
+            }.addOnFailureListener { e ->
+                Log.w("Firestore", "Error getting transaction", e)
+            }
+        }
+    }
+
+    fun updateTransaction(updatedTransaction: Transaction) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            val transactionDocRef = db.collection(Collections.TRANSACTIONS)
+                .document(userId)
+                .collection(Fields.TRANSACTION)
+                .document(updatedTransaction.id)
+
+            transactionDocRef.get().addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val oldTransaction = document.toObject(Transaction::class.java)
+                    val userDocRef = db.collection(Collections.USERS).document(userId)
+
+                    userDocRef.get().addOnSuccessListener { userDocument ->
+                        if (userDocument.exists()) {
+                            val user = userDocument.toObject(User::class.java)
+                            if (oldTransaction == null) {
+                                Log.w("Firestore", "Old transaction is null")
+                                return@addOnSuccessListener
+                            }
+
+                            if (oldTransaction.period == user?.currentPeriod) {
+                                val coastDifference = updatedTransaction.coast.toDouble() - oldTransaction.coast.toDouble()
+                                val transactionDate = LocalDate.parse(
+                                    updatedTransaction.date,
+                                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                                )
+                                val today = LocalDate.now()
+
+                                when (updatedTransaction.type) {
+                                    EXPENSES -> {
+                                        val newExpensesForDay = if (transactionDate.isEqual(today)) {
+                                            (user.expensesForDay + coastDifference.toFloat()).toDouble()
+                                        } else {
+                                            user.expensesForDay.toDouble()
+                                        }
+
+                                        checkLimit(newExpensesForDay.toFloat(), user.dayLimit)
+
+                                        userDocRef.update(
+                                            Fields.TOTAL_EXPENDITURE,
+                                            FieldValue.increment(coastDifference.toDouble()),
+                                            Fields.EXPENSES_FOR_THE_PERIOD,
+                                            FieldValue.increment(coastDifference.toDouble()),
+                                            Fields.EXPENSES_FOR_DAY,
+                                            newExpensesForDay
+                                        )
+                                    }
+                                    INCOME -> {
+                                        userDocRef.update(
+                                            Fields.TOTAL_INCOME,
+                                            FieldValue.increment(coastDifference.toDouble()),
+                                            Fields.INCOME_FOR_THE_PERIOD,
+                                            FieldValue.increment(coastDifference.toDouble())
+                                        )
+                                    }
+                                }
+                            }
+
+                            // Update category in CategoriesViewModel if changed
+                            if (oldTransaction.category != updatedTransaction.category) {
+                                when (updatedTransaction.type) {
+                                    EXPENSES -> categoriesViewModel.addCategoryOfExpenditure(updatedTransaction.category)
+                                    INCOME -> categoriesViewModel.addCategoryOfIncome(updatedTransaction.category)
+                                }
+                            }
+
+                            // Update period data
+                            updatePeriodData(oldTransaction, -oldTransaction.coast.toFloat())
+                            updatePeriodData(updatedTransaction, updatedTransaction.coast.toFloat())
+
+                            // Update family profile if applicable
+                            if (user?.familyId.isNotNull()) {
+                                familyViewModel.updateFamilyProfile(
+                                    user!!.familyId!!,
+                                    updatedTransaction,
+                                    updatedTransaction.type
+                                )
+                            }
+
+                            // Update transaction in Firestore
+                            transactionDocRef.set(updatedTransaction)
+                                .addOnSuccessListener {
+                                    Log.d("Firestore", "Transaction successfully updated!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("Firestore", "Error updating transaction", e)
+                                }
                         }
                     }.addOnFailureListener { e ->
                         Log.w("Firestore", "Error getting user document", e)

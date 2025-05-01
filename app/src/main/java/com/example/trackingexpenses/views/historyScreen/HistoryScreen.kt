@@ -65,7 +65,6 @@ fun HistoryScreen(
         }
 
         if (groupedTransactions.isEmpty()) {
-            val a = "s".lowercase()
             item {
                 Box(
                     modifier = Modifier

@@ -39,7 +39,7 @@ fun NotificationDialog(
     onDismiss: () -> Unit,
 ) {
     val selectedDate = remember { mutableStateOf(Calendar.getInstance()) }
-    val message = remember { mutableStateOf("") } // State for the message input
+    val message = remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -49,14 +49,14 @@ fun NotificationDialog(
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.send_query_title),
+                    text = "Создание кастомных уведомлений",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
                 Text(
-                    text = stringResource(id = R.string.information_about_query),
+                    text = "Выберите время и введите текст сообщения",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -107,9 +107,10 @@ fun NotificationDialog(
                     }
                     Button(
                         onClick = {
-                            scheduler.scheduleNotification(context, selectedDate.value.timeInMillis)
+                            scheduler.scheduleNotification(context, selectedDate.value.timeInMillis, message.value)
                             Log.i("Time", selectedDate.value.timeInMillis.toString())
                             Log.i("Message", message.value)
+                            Log.e("!!!", message.value)
                             onDismiss()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),

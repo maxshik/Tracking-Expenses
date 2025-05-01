@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
@@ -15,6 +16,7 @@ import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.barchart.models.SelectionHighlightData
 import com.example.trackingexpenses.R
 import com.example.trackingexpenses.models.BarData
+import kotlin.math.absoluteValue
 
 @Composable
 fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context) {
@@ -22,8 +24,20 @@ fun BarchartBars(popularCategories: List<Pair<Double, String>>, context: Context
         return
     }
 
+    val fixedColors = listOf(
+        Color(0xFF2196F3), Color(0xFFF44336), Color(0xFF4CAF50), Color(0xFFFFC107),
+        Color(0xFF9C27B0), Color(0xFF00BCD4), Color(0xFFFF5722), Color(0xFF795548),
+        Color(0xFF607D8B), Color(0xFFE91E63), Color(0xFF3F51B5), Color(0xFF009688),
+        Color(0xFFCDDC39), Color(0xFF673AB7), Color(0xFFFF9800), Color(0xFF8BC34A),
+        Color(0xFF03A9F4), Color(0xFFFFEB3B), Color(0xFF9E9E9E), Color(0xFF827717),
+        Color(0xFF0288D1), Color(0xFFD81B60), Color(0xFF388E3C), Color(0xFFFBC02D),
+        Color(0xFF5D4037), Color(0xFF7B1FA2), Color(0xFF1976D2), Color(0xFF689F38),
+        Color(0xFFB0BEC5), Color(0xFFFF6F00), Color(0xFF512DA8), Color(0xFF006064)
+    )
+
     val myBarData = popularCategories.mapIndexed { index, (amount, category) ->
-        val color = getRandomColor()
+        val colorIndex = category.hashCode().absoluteValue % fixedColors.size
+        val color = fixedColors[colorIndex]
         BarData(
             label = category,
             point = Point(index.toFloat(), amount.toFloat()),

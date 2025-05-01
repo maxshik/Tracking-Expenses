@@ -5,16 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        createNotification(context)
+        val message = intent?.getStringExtra("message") ?: "бред"
+        createNotification(context, message)
     }
 
-    private fun createNotification(context: Context?) {
+    private fun createNotification(context: Context?, message: String) {
         val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "default_channel"
 
@@ -26,7 +26,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.notifications)
             .setContentTitle("Отложенное уведомление")
-            .setContentText("Ваше уведомление сработало!")
+            .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         notificationManager.notify(1, notificationBuilder.build())

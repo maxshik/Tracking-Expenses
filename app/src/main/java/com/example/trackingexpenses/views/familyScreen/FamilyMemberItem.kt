@@ -31,54 +31,56 @@ fun FamilyMemberItem(
     onSettingsClick: () -> Unit,
     isItCardForAdmin: Boolean = true
 ) {
-    Card(
-        shape = RoundedCornerShape(6.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+    if (familyMember.name != " Unknown") {
+        Card(
+            shape = RoundedCornerShape(6.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(familyMember.img),
-                contentDescription = null,
-                Modifier
-                    .size(60.dp)
-                    .padding(6.dp)
-                    .clip(CircleShape)
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Name: ${familyMember.name ?: "Unknown"}",
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(2.dp)
+                Image(
+                    painter = rememberAsyncImagePainter(familyMember.img),
+                    contentDescription = null,
+                    Modifier
+                        .size(60.dp)
+                        .padding(6.dp)
+                        .clip(CircleShape)
                 )
-                Text(
-                    text = "Email: ${familyMember.email}",
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(2.dp)
-                )
-                Text(
-                    text = "Status: ${familyMember.status}",
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(2.dp)
-                )
-            }
 
-            if (isItCardForAdmin) {
-                IconButton(onClick = onSettingsClick) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = stringResource(id = R.string.settings),
-                        tint = MaterialTheme.colorScheme.secondary
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = "Name: ${familyMember.name ?: "Unknown"}",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(2.dp)
                     )
+                    Text(
+                        text = "Email: ${familyMember.email}",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                    Text(
+                        text = "Status: ${familyMember.status}",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+
+                if (isItCardForAdmin) {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
                 }
             }
         }

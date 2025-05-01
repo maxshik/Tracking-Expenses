@@ -8,10 +8,18 @@ import android.os.Build
 import android.widget.Toast
 
 class NotificationScheduler {
-    fun scheduleNotification(context: Context, targetTimeInMillis: Long) {
+    fun scheduleNotification(context: Context, targetTimeInMillis: Long, message: String) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent = Intent(context, NotificationReceiver::class.java).apply {
+            putExtra("message", message)
+        }
+        val requestCode = targetTimeInMillis.toInt()
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (alarmManager.canScheduleExactAlarms()) {
