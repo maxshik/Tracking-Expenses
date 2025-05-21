@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.trackingexpenses.R
-import com.example.trackingexpenses.objects.SortTypesInHistoryActivity.ALL_TRANSACTIONS
 import com.example.trackingexpenses.viewModels.TransactionHistoryViewModel
 import com.example.trackingexpenses.viewModels.TransactionManagementViewModel
 import com.example.trackingexpenses.views.SelectSortTypeMenu
@@ -37,10 +36,10 @@ fun HistoryScreen(
     transactionManagementViewModel: TransactionManagementViewModel,
 ) {
     val allTransactions by transactionHistoryViewModel.allTransactions.observeAsState(emptyList())
-    val selectedSortType = transactionHistoryViewModel.currentSortType.value
+    val selectedSortType by transactionHistoryViewModel.currentSortType
 
-    LaunchedEffect(Unit) {
-        transactionHistoryViewModel.currentSortType.value = ALL_TRANSACTIONS
+    // Trigger fetchAndFilterTransactions when selectedSortType changes
+    LaunchedEffect(selectedSortType) {
         transactionHistoryViewModel.fetchAndFilterTransactions(selectedSortType)
     }
 
